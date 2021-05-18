@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve --ssl --host 0.0.0.0",
     "build": "ng build",
+    "buildx": "ng build --output-path docs --base-href /lyfront-vs/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

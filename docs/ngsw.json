@@ -1,0 +1,81 @@
+{
+  "configVersion": 1,
+  "timestamp": 1621319290818,
+  "index": "/lyfront-vs/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/lyfront-vs/favicon.ico",
+        "/lyfront-vs/index.html",
+        "/lyfront-vs/main.24009b0c2898bf7ceb62.js",
+        "/lyfront-vs/manifest.webmanifest",
+        "/lyfront-vs/polyfills.80bd16357fb8100eb0d2.js",
+        "/lyfront-vs/runtime.647224fad224bd704422.js",
+        "/lyfront-vs/styles.fbc86c33f425b6829e98.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/lyfront-vs/assets/icons/icon-128x128.png",
+        "/lyfront-vs/assets/icons/icon-144x144.png",
+        "/lyfront-vs/assets/icons/icon-152x152.png",
+        "/lyfront-vs/assets/icons/icon-192x192.png",
+        "/lyfront-vs/assets/icons/icon-384x384.png",
+        "/lyfront-vs/assets/icons/icon-512x512.png",
+        "/lyfront-vs/assets/icons/icon-72x72.png",
+        "/lyfront-vs/assets/icons/icon-96x96.png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/lyfront-vs/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
+    "/lyfront-vs/assets/icons/icon-144x144.png": "b0bd89982e08f9bd2b642928f5391915b74799a7",
+    "/lyfront-vs/assets/icons/icon-152x152.png": "7479a9477815dfd9668d60f8b3b2fba709b91310",
+    "/lyfront-vs/assets/icons/icon-192x192.png": "1abd80d431a237a853ce38147d8c63752f10933b",
+    "/lyfront-vs/assets/icons/icon-384x384.png": "329749cd6393768d3131ed6304c136b1ca05f2fd",
+    "/lyfront-vs/assets/icons/icon-512x512.png": "559d9c4318b45a1f2b10596bbb4c960fe521dbcc",
+    "/lyfront-vs/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
+    "/lyfront-vs/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
+    "/lyfront-vs/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
+    "/lyfront-vs/index.html": "d51e993a07da62a0eef0f4090cb6950a186e1bcb",
+    "/lyfront-vs/main.24009b0c2898bf7ceb62.js": "9b5e06575313e8ecbcd5efc5c209d10f603229db",
+    "/lyfront-vs/manifest.webmanifest": "a36ef649f6a009da89e9063db9553af3a3fadeea",
+    "/lyfront-vs/polyfills.80bd16357fb8100eb0d2.js": "b1ae87931647588ffe79fe2c3d06d06c0aae3988",
+    "/lyfront-vs/runtime.647224fad224bd704422.js": "7f5eca67074a0c2340248fa5b693b034680b791f",
+    "/lyfront-vs/styles.fbc86c33f425b6829e98.css": "acbe00ff595d4af611c9b72795f5179d66e47589"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}

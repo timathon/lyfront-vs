@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1621321948644,
+  "timestamp": 1621399865999,
   "index": "/lyfront-vs/index.html",
   "assetGroups": [
     {
@@ -13,11 +13,11 @@
       "urls": [
         "/lyfront-vs/favicon.ico",
         "/lyfront-vs/index.html",
-        "/lyfront-vs/main.60966c41dd20218fa4d6.js",
+        "/lyfront-vs/main.8175a6a2381e703cf5d0.js",
         "/lyfront-vs/manifest.webmanifest",
         "/lyfront-vs/polyfills.80bd16357fb8100eb0d2.js",
-        "/lyfront-vs/runtime.647224fad224bd704422.js",
-        "/lyfront-vs/styles.fbc86c33f425b6829e98.css"
+        "/lyfront-vs/runtime.d723ca33c7153b9c1cfb.js",
+        "/lyfront-vs/styles.b69503d4a6c11efdfee9.css"
       ],
       "patterns": []
     },
@@ -52,12 +52,12 @@
     "/lyfront-vs/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
     "/lyfront-vs/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
     "/lyfront-vs/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/lyfront-vs/index.html": "ade755b6b355dc3591ae5a1b60ca725c5825678c",
-    "/lyfront-vs/main.60966c41dd20218fa4d6.js": "1d86f8c79653437ed2afd5091787e913286f0831",
+    "/lyfront-vs/index.html": "7d42451742c4383d7b8f5aa4a7d9933a46ff1799",
+    "/lyfront-vs/main.8175a6a2381e703cf5d0.js": "de062e6e17eb68e47e9f1ef4e20c3c89dc605239",
     "/lyfront-vs/manifest.webmanifest": "a36ef649f6a009da89e9063db9553af3a3fadeea",
     "/lyfront-vs/polyfills.80bd16357fb8100eb0d2.js": "b1ae87931647588ffe79fe2c3d06d06c0aae3988",
-    "/lyfront-vs/runtime.647224fad224bd704422.js": "7f5eca67074a0c2340248fa5b693b034680b791f",
-    "/lyfront-vs/styles.fbc86c33f425b6829e98.css": "acbe00ff595d4af611c9b72795f5179d66e47589"
+    "/lyfront-vs/runtime.d723ca33c7153b9c1cfb.js": "0a62550f9dec01d327eae5effaa3f26a00cade3f",
+    "/lyfront-vs/styles.b69503d4a6c11efdfee9.css": "4b9d788cd9c950dd74b82d691beccce5e7c43252"
   },
   "navigationUrls": [
     {

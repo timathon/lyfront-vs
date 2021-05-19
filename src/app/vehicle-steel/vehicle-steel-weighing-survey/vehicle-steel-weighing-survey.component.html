@@ -1,0 +1,36 @@
+
+<mat-card>
+  <button mat-raised-button color="primary" (click)="openDialog()">新建进场物资</button>
+  <div>&nbsp;</div>
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span>近期进场物资</span>
+        </mat-panel-title>
+        <!-- <mat-panel-description>
+          Currently I am 
+        </mat-panel-description> -->
+      </mat-expansion-panel-header>
+      <mat-checkbox
+        (change)="filterSurveyDone$$.next($event.checked)"
+      >仅显示未验质</mat-checkbox>
+      <div><span>&nbsp;</span></div>
+      <app-vehicle-steel-weighing-survey-recent [vswsRecentList]="vswsRecentList$ | async"></app-vehicle-steel-weighing-survey-recent>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <div>&nbsp;</div>
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          进场物资汇总
+        </mat-panel-title>
+        <!-- <mat-panel-description>
+          Currently I am 
+        </mat-panel-description> -->
+      </mat-expansion-panel-header>
+      <p>To Do</p>
+    </mat-expansion-panel>
+  </mat-accordion>
+</mat-card>

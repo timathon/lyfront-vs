@@ -4,6 +4,7 @@ import { VehicleSteelWeighingSurveyDialogComponent } from '../vehicle-steel-weig
 import { DataService } from "@app/shared/services/data.service";
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { VehicleSteelWeighingSurvey } from '@app/shared/services/data/data-vehicle-steel';
 
 @Component({
   selector: 'app-vehicle-steel-weighing-survey',
@@ -28,12 +29,18 @@ export class VehicleSteelWeighingSurveyComponent implements OnInit {
               return showOnlySurveyNotDone ? vswsRecentList.filter(item => item.surveyDone === false) : vswsRecentList
             })
           )
-                
+
       }))
   }
 
-  openDialog(vsws?: any) {
-    const dialogRef = this.dialog.open(VehicleSteelWeighingSurveyDialogComponent, { disableClose: true });
+  openDialog(vsws?: VehicleSteelWeighingSurvey) {
+    if (!vsws) {
+      vsws = new VehicleSteelWeighingSurvey();
+    }
+    const dialogRef = this.dialog.open(VehicleSteelWeighingSurveyDialogComponent, {
+      disableClose: true,
+      data: {vsws}
+    });
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });

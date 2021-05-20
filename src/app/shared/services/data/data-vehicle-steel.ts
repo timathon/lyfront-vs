@@ -28,11 +28,20 @@ export class DataVehicleSteel {
 
 }
 
-export interface VehicleSteelWeighingSurvey {
-  id?: any;
-  truckPlateNo: string;
-  grossWeight: number;
-  wDate?: Date;
+// export interface VehicleSteelWeighingSurvey {
+//   id?: any;
+//   truckPlateNo: string;
+//   grossWeight: number;
+//   wDate?: Date;
+//   sDate?: Date;
+//   surveyDone: boolean;
+// }
+
+export class VehicleSteelWeighingSurvey {
+  id?: any = null;
+  truckPlateNo: string = '';
+  grossWeight: number = 0;
+  wDate?: Date = new Date();
   sDate?: Date;
-  surveyDone: boolean;
+  surveyDone: boolean = false;
 }

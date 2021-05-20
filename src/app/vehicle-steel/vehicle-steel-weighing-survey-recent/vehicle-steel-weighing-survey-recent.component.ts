@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+
 import { DataService } from "@app/shared/services/data.service";
 import { VehicleSteelWeighingSurvey } from '@app/shared/services/data/data-vehicle-steel';
-import { Observable } from 'rxjs';
+import { VehicleSteelWeighingSurveyDialogComponent } from '../vehicle-steel-weighing-survey-dialog/vehicle-steel-weighing-survey-dialog.component';
 
 @Component({
   selector: 'app-vehicle-steel-weighing-survey-recent',
@@ -15,13 +17,25 @@ export class VehicleSteelWeighingSurveyRecentComponent implements OnInit {
     'id', 'truckPlateNo', 'grossWeight', 'surveyDone', 'edit'
   ];
   constructor(
-    private backend: DataService
+    // private backend: DataService,
+    public dialog: MatDialog,
   ) {
     // this.vswsRecentList$ = this.backend.dataVS.getRecent();
 
    }
 
   ngOnInit(): void {
+  }
+
+  edit(vsws: VehicleSteelWeighingSurvey) {
+
+    const dialogRef = this.dialog.open(VehicleSteelWeighingSurveyDialogComponent, {
+      disableClose: true,
+      data: {vsws}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 
 }

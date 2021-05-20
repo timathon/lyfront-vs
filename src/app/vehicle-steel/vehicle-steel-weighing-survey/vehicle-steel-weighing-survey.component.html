@@ -14,7 +14,7 @@
       </mat-expansion-panel-header>
       <mat-checkbox
         (change)="filterSurveyDone$$.next($event.checked)"
-      >仅显示未验质</mat-checkbox>
+      >仅显示【未验质】</mat-checkbox>
       <div><span>&nbsp;</span></div>
       <app-vehicle-steel-weighing-survey-recent [vswsRecentList]="vswsRecentList$ | async"></app-vehicle-steel-weighing-survey-recent>
     </mat-expansion-panel>

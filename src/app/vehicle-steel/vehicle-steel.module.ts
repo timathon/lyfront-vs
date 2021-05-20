@@ -1,0 +1,23 @@
+import { NgModule } from '@angular/core';
+import { SharedModule } from '../shared/shared.module';
+
+import { VehicleSteelRoutingModule } from './vehicle-steel-routing.module';
+import { VehicleSteelHomeComponent } from './vehicle-steel-home/vehicle-steel-home.component';
+import { VehicleSteelWeighingSurveyComponent } from './vehicle-steel-weighing-survey/vehicle-steel-weighing-survey.component';
+import { VehicleSteelWeighingSurveyDialogComponent } from './vehicle-steel-weighing-survey-dialog/vehicle-steel-weighing-survey-dialog.component';
+import { VehicleSteelWeighingSurveyRecentComponent } from './vehicle-steel-weighing-survey-recent/vehicle-steel-weighing-survey-recent.component';
+
+
+@NgModule({
+  declarations: [
+    VehicleSteelHomeComponent,
+    VehicleSteelWeighingSurveyComponent,
+    VehicleSteelWeighingSurveyDialogComponent,
+    VehicleSteelWeighingSurveyRecentComponent
+  ],
+  imports: [
+    VehicleSteelRoutingModule,
+    SharedModule
+  ]
+})
+export class VehicleSteelModule { }

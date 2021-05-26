@@ -8,6 +8,8 @@ import { VehicleSteelWeighingSurveyDialogComponent } from './vehicle-steel-weigh
 import { VehicleSteelWeighingSurveyRecentComponent } from './vehicle-steel-weighing-survey-recent/vehicle-steel-weighing-survey-recent.component';
 import { VehicleSteelWeighingSurveyDialogService } from './vehicle-steel-weighing-survey-dialog/vehicle-steel-weighing-survey-dialog.service';
 import { CustomersModule } from '@app/customers/customers.module';
+import { DecimalPipe } from '@angular/common';
+
 
 
 @NgModule({
@@ -22,6 +24,6 @@ import { CustomersModule } from '@app/customers/customers.module';
     SharedModule,
     CustomersModule
   ],
-  providers: [VehicleSteelWeighingSurveyDialogService],
+  providers: [VehicleSteelWeighingSurveyDialogService, DecimalPipe],
 })
 export class VehicleSteelModule { }

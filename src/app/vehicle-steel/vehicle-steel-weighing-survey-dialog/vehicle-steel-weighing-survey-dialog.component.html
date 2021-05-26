@@ -6,58 +6,109 @@
       <mat-card-header>
         <mat-card-title><small>过磅信息</small></mat-card-title>
       </mat-card-header>
-      <mat-card-content>
+      <mat-card-content formGroupName="weighing">
         <!-- <mat-form-field>
           <mat-label>进场编号:</mat-label>
           <input matInput formControlName="_id">
         </mat-form-field> -->
-        <div formGroupName="weighing">
-          <span>&nbsp;</span>
-          <mat-form-field>
-            <mat-label>
-              <mat-icon>local_shipping</mat-icon>
-              货车车牌号
-            </mat-label>
-            <input matInput formControlName="truckPlateNo"
-              [matAutocompleteDisabled]="!!vswsForm.get('truckPlateNo')?.value" [matAutocomplete]="auto">
-            <mat-autocomplete #auto="matAutocomplete">
-              <mat-option *ngFor="let option of truckPlateNoOptions" [value]="option">
-                {{option}}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-          <span>&nbsp;</span>
-          <mat-form-field>
-            <mat-label>
-              客户名称
-            </mat-label>
-            <input matInput formControlName="customerName"
-              [matAutocompleteDisabled]="!!this.data.vsws.weighing.customerId"
-              [matAutocomplete]="autoCustomerName">
-            <mat-autocomplete #autoCustomerName="matAutocomplete">
-              <mat-option *ngFor="let customerOption of possibleCustomers$ | async" [value]="customerOption.name">
-                {{customerOption.name}}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-          <span>&nbsp;</span>
-          <mat-form-field>
-            <mat-label>
-              客户电话
-            </mat-label>
-            <input matInput formControlName="customerTel">
-          </mat-form-field>
-          <span>&nbsp;</span>
-          <button mat-raised-button color="primary" *ngIf="showNewCustomerButton"
-            (click)="openCustomerDialog(customer)" [disabled]="loadingPossibleCustomers">新建客户</button>
-          <button mat-button color="primary" *ngIf="!showNewCustomerButton" [disabled]="disableEditCustomerButton"
-            (click)="openCustomerDialog(customer)">编辑客户</button>
-        </div>
+        <span>&nbsp;</span>
+        <mat-form-field>
+          <mat-label>
+            货车车牌号
+          </mat-label>
+          <input matInput formControlName="truckPlateNo"
+            [matAutocompleteDisabled]="!!vswsForm.get('truckPlateNo')?.value" [matAutocomplete]="auto">
+          <mat-icon matPrefix>local_shipping</mat-icon>
+
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of truckPlateNoOptions" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <span>&nbsp;</span>
+        <mat-form-field>
+          <mat-label>
+            客户名称
+          </mat-label>
+          <input matInput formControlName="customerName"
+            [matAutocompleteDisabled]="!!this.data.vsws.weighing.customerId" [matAutocomplete]="autoCustomerName">
+          <mat-autocomplete #autoCustomerName="matAutocomplete">
+            <mat-option *ngFor="let customerOption of possibleCustomers$ | async" [value]="customerOption.name">
+              {{customerOption.name}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <span>&nbsp;</span>
+        <mat-form-field>
+          <mat-label>
+            客户电话
+          </mat-label>
+          <input matInput formControlName="customerTel">
+        </mat-form-field>
+        <span>&nbsp;</span>
+        <button mat-raised-button color="accent" *ngIf="status.showNewCustomerButton"
+          (click)="openCustomerDialog(customer)" [disabled]="loadingPossibleCustomers">新建客户</button>
+        <button mat-button color="primary" *ngIf="!status.showNewCustomerButton" [disabled]="disableEditCustomerButton"
+          (click)="openCustomerDialog(customer)">编辑客户</button>
         <br>
-        <!-- <mat-form-field>
-          <mat-label>毛重（公斤）:</mat-label>
-          <input matInput formControlName="grossWeight">
-        </mat-form-field> -->
+        <mat-form-field>
+          <mat-label>毛重（公斤）</mat-label>
+          <input matInput type="number" formControlName="inWeightKG">
+          <mat-icon matPrefix>login</mat-icon>
+        </mat-form-field>
+        <span>&nbsp;</span>
+        <mat-form-field>
+          <mat-label>进场日期</mat-label>
+          <input matInput type="date" formControlName="inWeighedDate">
+        </mat-form-field>
+        <span>&nbsp;</span>
+        <mat-form-field>
+          <mat-label>进场时间</mat-label>
+          <input matInput type="time" formControlName="inWeighedTime">
+        </mat-form-field>
+        <span>&nbsp;</span>
+        <mat-form-field>
+          <mat-label>进场司磅</mat-label>
+          <input matInput formControlName="inWeighedByName">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <mat-label>皮重（公斤）</mat-label>
+          <input matInput type="number" formControlName="outWeightKG">
+          <mat-icon matPrefix>logout</mat-icon>
+        </mat-form-field>
+        <span>&nbsp;</span>
+        <mat-form-field>
+          <mat-label>出场日期</mat-label>
+          <input matInput type="date" formControlName="outWeighedDate">
+        </mat-form-field>
+        <span>&nbsp;</span>
+        <mat-form-field>
+          <mat-label>出场时间</mat-label>
+          <input matInput type="time" formControlName="outWeighedTime">
+        </mat-form-field>
+        <span>&nbsp;</span>
+        <mat-form-field>
+          <mat-label>出场司磅</mat-label>
+          <input matInput formControlName="outWeighedByName">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>净重（公斤）</mat-label>
+          <input matInput type="number" disabled [value]="status.netWeightKG">
+        </mat-form-field>
+        <span>&nbsp;</span>
+        <button mat-button color="warn" *ngIf="vswsForm.errors">
+          {{vswsForm.errors?.weightError ? '皮重不能大于毛重' : ''}}
+        </button>
+        <br>
+        <mat-form-field class="width-fifty">
+          <mat-label>
+            备注
+          </mat-label>
+          <textarea matInput formControlName="notes"></textarea>
+        </mat-form-field>
+
       </mat-card-content>
     </mat-card>
     <br>
@@ -65,12 +116,42 @@
       <mat-card-header>
         <mat-card-title><small>验质信息</small></mat-card-title>
       </mat-card-header>
-      <mat-card-content>
+      <mat-card-content formGroupName="survey">
         <mat-form-field>
-          <mat-label>进场编号:</mat-label>
-          <input matInput formControlName="_id">
+          <mat-label>验质员</mat-label>
+          <input matInput formControlName="surveyedByName">
         </mat-form-field>
+        <span>&nbsp;</span>
+        <mat-form-field>
+          <mat-label>验质日期</mat-label>
+          <input matInput type="date" formControlName="surveyedDate">
+        </mat-form-field>
+        <span>&nbsp;</span>
+        <mat-form-field>
+          <mat-label>验质时间</mat-label>
+          <input matInput type="time" formControlName="surveyedTime">
+        </mat-form-field>
+        <span>&nbsp;</span>
+        <button mat-raised-button color="primary" (click)="addMaterial()">添加物资</button>
         <br>
+        <mat-card *ngFor="let material of materialsFormArray.controls; let i=index">
+          <mat-card-content>
+            <mat-form-field>
+              <mat-label>物资名称</mat-label>
+              <!-- <input matInput> -->
+              <!-- <input matInput [formControl]="getMaterialControl(i, 'pwsName')"> -->
+              <mat-select>
+                <mat-option *ngFor="let pw of selectedPws" [value]="pw._id">
+                  {{pw.name}}
+                </mat-option>
+              </mat-select>
+              <span matPrefix>{{i + 1}}&nbsp;&nbsp;</span>
+            </mat-form-field>
+            <span>&nbsp;</span>
+            <button mat-button color="accent" (click)="removeMaterial(i)" *ngIf="!!material.get('_id')?.value">删除</button>
+
+          </mat-card-content>
+        </mat-card>
       </mat-card-content>
     </mat-card>
     <br>
@@ -94,3 +175,5 @@
   <button mat-button color="primary" mat-dialog-close>取消</button>
   <button mat-raised-button color="primary" [mat-dialog-close]="true" [disabled]="vswsForm.invalid">保存</button>
 </mat-dialog-actions>
+
+<input style="display: none" [value]="status.observables.valueChanges | async">

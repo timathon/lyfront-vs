@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { APP_CONFIG } from '@app/app.config';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { JsonPatchError } from 'fast-json-patch/module/core';
+import { User } from './data/data-users';
 
 
 @Injectable({
@@ -17,6 +19,15 @@ export class AuthService {
     @Inject(APP_CONFIG) private appConfig: any
   ) {
     this.checkLoginStatus();
+  }
+
+  getCurrentUser(): User | null {
+    const cu = localStorage.getItem('currentUser');
+    if (cu) {
+      return JSON.parse(cu);
+    } else {
+      return null;
+    }
   }
 
   getJwtPayload(token: string) {

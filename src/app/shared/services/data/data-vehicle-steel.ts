@@ -1,20 +1,83 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 
+export interface VehicleSteelWeighing {
+  truckPlateNo: string,
+  customerId?: any,
+  customerName?: string, // delete before patch
+  customerTel?: string, // delete before patch
+  inWeightKG?: number,
+  inWeighedAt?: Date,
+  inWeighedBy?: any,
+  outWeightKG?: number,
+  outWeighedAt?: Date,
+  outWeighedBy?: any,
+  note?: ''
+}
+
+export interface VehicleSteelSurvey {
+  surveyedBy?: any,
+  surveyedAt?: Date,
+  materials?: SurveyedMaterial[]
+}
+
+export interface SurveyedMaterial {
+  type?: any,
+  weightKG?: number,
+  count?: number,
+  cost?: number,
+  note?: string,
+  inventoryId?: any,
+  createdAt?: Date,
+  createdBy?: any,
+  modifiedAt?: Date,
+  modifiedBy?: any,
+  isDeleted?: boolean,
+  deletedAt?: Date,
+  deletedBy?: any,
+  deleteNote?: string
+}
+
+export class VehicleSteelWeighingSurvey {
+  _id?: any = null;
+  createdAt?: any = null;
+  createdBy?: any = null;
+  lastModifiedAt?: any = null;
+  isDeleted?: any = false;
+  deletedAt?: any = null;
+  deletedBy?: any = null;
+  weighing: VehicleSteelWeighing = {
+    truckPlateNo: ''
+  };
+  survey: VehicleSteelSurvey = {
+  }
+  changeLogs?: any[] = []; // delete before patch
+  constructor() {
+
+  }
+}
+
 
 export class DataVehicleSteel {
   weighingSurveyEntries: VehicleSteelWeighingSurvey[] = [
     {
-      id: 1,
-      truckPlateNo: '辽N12121',
-      grossWeight: 1000,
-      surveyDone: true
+      _id: 1,
+      weighing: {
+        truckPlateNo: '辽N12121',
+        customerId: '5a328e6ae2870c00146a5065'
+      },
+      survey: {
+        surveyedAt: new Date('2021-5-24'),
+        materials: []
+      }
     },
     {
-      id: 2,
-      truckPlateNo: '辽N90909',
-      grossWeight: 2000,
-      surveyDone: false
+      _id: 2,
+      weighing: {
+        truckPlateNo: '辽N90909',
+      },
+      survey: {
+      }
     }
   ];
   constructor(private http: HttpClient) {
@@ -37,11 +100,3 @@ export class DataVehicleSteel {
 //   surveyDone: boolean;
 // }
 
-export class VehicleSteelWeighingSurvey {
-  id?: any = null;
-  truckPlateNo: string = '';
-  grossWeight: number = 0;
-  wDate?: Date = new Date();
-  sDate?: Date;
-  surveyDone: boolean = false;
-}

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { VehicleSteelWeighingSurveyDialogComponent } from '../vehicle-steel-weighing-survey-dialog/vehicle-steel-weighing-survey-dialog.component';
 import { DataService } from "@app/shared/services/data.service";
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { VehicleSteelWeighingSurvey } from '@app/shared/services/data/data-vehicle-steel';
+import { VehicleSteelWeighingSurveyDialogService } from '@app/vehicle-steel/vehicle-steel-weighing-survey-dialog/vehicle-steel-weighing-survey-dialog.service';
 
 @Component({
   selector: 'app-vehicle-steel-weighing-survey',
@@ -16,8 +15,8 @@ export class VehicleSteelWeighingSurveyComponent implements OnInit {
   filterSurveyDone$$ = new BehaviorSubject(false);
 
   constructor(
-    public dialog: MatDialog,
-    private backend: DataService
+    private backend: DataService,
+    public vswsDialog: VehicleSteelWeighingSurveyDialogService
   ) { }
 
   ngOnInit(): void {
@@ -26,26 +25,12 @@ export class VehicleSteelWeighingSurveyComponent implements OnInit {
         return this.filterSurveyDone$$
           .pipe(
             map((showOnlySurveyNotDone) => {
-              return showOnlySurveyNotDone ? vswsRecentList.filter(item => item.surveyDone === false) : vswsRecentList
+              return showOnlySurveyNotDone ? vswsRecentList.filter(item => !!item.survey.surveyedAt === false) : vswsRecentList
             })
           )
 
       }))
   }
-
-  openDialog(vsws?: VehicleSteelWeighingSurvey) {
-    if (!vsws) {
-      vsws = new VehicleSteelWeighingSurvey();
-    }
-    const dialogRef = this.dialog.open(VehicleSteelWeighingSurveyDialogComponent, {
-      disableClose: true,
-      data: {vsws}
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
-
 
 }
 

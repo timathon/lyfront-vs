@@ -1,0 +1,45 @@
+<h2 mat-dialog-title>{{dialogTitle}}</h2>
+<!-- <mat-dialog-content class="mat-typography"> -->
+<form [formGroup]="formX">
+  <mat-dialog-content>
+    <mat-card>
+      <!-- <mat-card-header>
+        <mat-card-title><small></small></mat-card-title>
+      </mat-card-header> -->
+      <mat-card-content>
+        <mat-form-field>
+          <mat-label>
+            客户名称
+          </mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+        <span>&nbsp;</span>
+        <mat-form-field>
+          <mat-label>
+            客户手机
+          </mat-label>
+          <input matInput formControlName="mobile">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <mat-label>
+            备注
+          </mat-label>
+          <textarea matInput formControlName="notes"></textarea>
+        </mat-form-field>
+        <span>&nbsp;</span>
+      </mat-card-content>
+    </mat-card>
+
+
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button color="primary" (click)="onCancel()">取消</button>
+    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="formX.invalid || !status.changed">
+      保存
+    </button>
+  </mat-dialog-actions>
+</form>
+
+<!-- async pipe automatically unsubsribes -->
+<input type="text" [value]="status$ | async | json" style="display: none">

@@ -45,7 +45,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -84,8 +84,8 @@
           },
           "defaultConfiguration": "development",
           "options":{
-            "sslKey": "../0-commons/ssl/cert.key",
-            "sslCert": "../0-commons/ssl/cert.crt"
+            "sslKey": "../0-commons/ssl/lyvs/cert.key",
+            "sslCert": "../0-commons/ssl/lyvs/cert.crt"
           }
         },
         "extract-i18n": {

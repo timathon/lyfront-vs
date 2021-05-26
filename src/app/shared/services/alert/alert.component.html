@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>{{data.alert.title}}</h2>
+<!-- <mat-dialog-content class="mat-typography"> -->
+<mat-dialog-content>
+  <mat-card>
+    <!-- <mat-card-header>
+        <mat-card-title><small></small></mat-card-title>
+      </mat-card-header> -->
+    <mat-card-content>
+      {{data.alert.message}}
+    </mat-card-content>
+  </mat-card>
+
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button color="primary" [mat-dialog-close]="true">是</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="false" cdkFocusInitial>
+    否
+  </button>
+</mat-dialog-actions>
+
+<!-- async pipe automatically unsubsribes -->
+<!-- <input type="text" [value]="status$ | async | json" style="display: none"> -->

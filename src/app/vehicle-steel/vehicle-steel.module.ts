@@ -6,6 +6,8 @@ import { VehicleSteelHomeComponent } from './vehicle-steel-home/vehicle-steel-ho
 import { VehicleSteelWeighingSurveyComponent } from './vehicle-steel-weighing-survey/vehicle-steel-weighing-survey.component';
 import { VehicleSteelWeighingSurveyDialogComponent } from './vehicle-steel-weighing-survey-dialog/vehicle-steel-weighing-survey-dialog.component';
 import { VehicleSteelWeighingSurveyRecentComponent } from './vehicle-steel-weighing-survey-recent/vehicle-steel-weighing-survey-recent.component';
+import { VehicleSteelWeighingSurveyDialogService } from './vehicle-steel-weighing-survey-dialog/vehicle-steel-weighing-survey-dialog.service';
+import { CustomersModule } from '@app/customers/customers.module';
 
 
 @NgModule({
@@ -17,7 +19,9 @@ import { VehicleSteelWeighingSurveyRecentComponent } from './vehicle-steel-weigh
   ],
   imports: [
     VehicleSteelRoutingModule,
-    SharedModule
-  ]
+    SharedModule,
+    CustomersModule
+  ],
+  providers: [VehicleSteelWeighingSurveyDialogService],
 })
 export class VehicleSteelModule { }

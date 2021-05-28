@@ -1,7 +1,15 @@
 <mat-tab-group>
-  <mat-tab label="进场与验质">
+  <mat-tab label="物资进场验质">
     <app-vehicle-steel-weighing-survey></app-vehicle-steel-weighing-survey>
+  </mat-tab>
+  <mat-tab disabled label="物资进场验质">
+    <ng-template mat-tab-label>
+      <button mat-button color="primary" (click)="refresh()" matTooltip="更新物料名称">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </ng-template>
   </mat-tab>
   <!-- <mat-tab label="Second"> Content 2 </mat-tab>
   <mat-tab label="Third"> Content 3 </mat-tab> -->
+  <!-- <a mat-tab-link disabled>Disabled Link</a> -->
 </mat-tab-group>

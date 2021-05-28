@@ -12,7 +12,8 @@ export class AlertService {
   ) { }
   openDialog(alert: {
     title: string,
-    message: string
+    message: string,
+    okOnly?: boolean
   }) {
     const dialogRef = this.dialog.open(AlertComponent, {
       disableClose: true,

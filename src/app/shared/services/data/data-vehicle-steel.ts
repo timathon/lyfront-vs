@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 
 export interface VehicleSteelWeighing {
@@ -25,8 +25,7 @@ export interface VehicleSteelSurvey {
 
 export class SurveyedMaterial {
   _id?: any;
-  pws?: any;
-  pwsName?: string;
+  pw?: any;
   weightKG?: number;
   count?: number;
   cost?: number;
@@ -51,10 +50,15 @@ export class VehicleSteelWeighingSurvey {
   isDeleted?: any = false;
   deletedAt?: any = null;
   deletedBy?: any = null;
+  deletedNotes?: any = null;
   weighing: VehicleSteelWeighing = {
-    truckPlateNo: ''
+    truckPlateNo: '',
+    notes: '',
+    inWeighedBy: '',
+    outWeighedBy: ''
   };
   survey: VehicleSteelSurvey = {
+    surveyedBy: '',
     materials: []
   }
   changeLogs?: any[] = []; // delete before patch
@@ -65,6 +69,8 @@ export class VehicleSteelWeighingSurvey {
 
 
 export class DataVehicleSteel {
+  apiURL = this.appConfig.backendUrl + '/api/vehicle-steel';
+
   weighingSurveyEntries: VehicleSteelWeighingSurvey[] = [
     {
       _id: 1,
@@ -80,7 +86,7 @@ export class DataVehicleSteel {
       survey: {
         surveyedAt: new Date('2021-5-24'),
         materials: [
-          {weightKG: 10}
+          { weightKG: 10 }
         ]
       }
     },
@@ -98,13 +104,27 @@ export class DataVehicleSteel {
       }
     }
   ];
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private setHeaders: (withJWT: boolean) => HttpHeaders | {
+      [header: string]: string | string[];
+    },
+    private appConfig: any,
+  ) {
 
   }
 
   getRecent(): Observable<VehicleSteelWeighingSurvey[]> {
     return of(this.weighingSurveyEntries);
   }
+
+  insert(newOne: VehicleSteelWeighingSurvey) {
+    return this.http.post(this.apiURL, newOne, {
+      headers: this.setHeaders(true)
+    });
+  }
+
+
 
 
 }

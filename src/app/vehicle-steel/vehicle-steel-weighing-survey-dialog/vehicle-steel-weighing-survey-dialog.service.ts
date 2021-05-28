@@ -6,7 +6,7 @@ import { Customer } from '@app/shared/services/data/data-customers';
 import { User } from '@app/shared/services/data/data-users';
 import { VehicleSteelWeighingSurvey } from '@app/shared/services/data/data-vehicle-steel';
 import { forkJoin, of } from 'rxjs';
-import { first, map } from 'rxjs/operators';
+import { first, map, switchMap } from 'rxjs/operators';
 import { VehicleSteelWeighingSurveyDialogComponent } from './vehicle-steel-weighing-survey-dialog.component';
 
 
@@ -48,6 +48,24 @@ export class VehicleSteelWeighingSurveyDialogService {
                 return null;
               }
             })
+          ),
+          surveyedBy: of(null).pipe(
+            switchMap(() => {
+              if (vsws.survey.surveyedBy) {
+                return this.backend.dataUsers.search({ _id: vsws.survey.surveyedBy }).pipe(
+                  map((users: User[]) => {
+                    console.log(users);
+                    if (users.length) {
+                      return users[0];
+                    } else {
+                      return null;
+                    }
+                  })
+                )
+              } else {
+                return of(null)
+              }
+            })
           )
         });
         // get the customer details
@@ -61,6 +79,9 @@ export class VehicleSteelWeighingSurveyDialogService {
               if (result.inWeighedBy) {
                 vsws.weighing.inWeighedByName = result.inWeighedBy.displayName;
               }
+              if (result.surveyedBy) {
+                vsws.survey.surveyedByName = result.surveyedBy.displayName;
+              }
               loadingDialogRef.close();
               return vsws;
             })
@@ -70,12 +91,14 @@ export class VehicleSteelWeighingSurveyDialogService {
     }
     forkJoin({
       vsws: prepareVSWS(vsws),
-      pws: this.backend.getPws()
+      pws: this.backend.dataPws.getPws()
     })
     .pipe(first()).subscribe(combo => {
       const dialogRef = this.dialog.open(VehicleSteelWeighingSurveyDialogComponent, {
         disableClose: true,
-        data: combo
+        data: combo,
+        // width: '50vw'
+        backdropClass: 'full-width' // todo
       });
       dialogRef.afterClosed().subscribe(result => {
         console.log(`Dialog result: ${result}`);

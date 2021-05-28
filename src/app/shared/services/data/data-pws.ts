@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { first, switchMap, tap } from 'rxjs/operators';
 import { CalculatePatchesService } from '../calculate-patches.service';
 
 export class Pws {
@@ -34,4 +35,27 @@ export class DataPws {
       headers: this.setHeaders(true)
     }) as Observable<Pws[]>;
   }
+
+  getPws() {
+    return of(localStorage.getItem('pws'))
+    .pipe(
+      switchMap(pws0 => {
+        if (pws0) {
+          return of(JSON.parse(pws0));
+        } else {
+          return this.refreshPws()
+        }
+      })
+    );
+  }
+
+  refreshPws() {
+    return this.search({}).pipe(
+      tap(pws => {
+        localStorage.setItem('pws', JSON.stringify(pws));
+      }),
+      first()
+    )
+  }
+
 }

@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { JsonPatchError } from 'fast-json-patch/module/core';
 import { User } from './data/data-users';
+import jwt_decode from "jwt-decode";
 
 
 @Injectable({
@@ -71,9 +72,11 @@ export class AuthService {
         map((res: any) => {
           // console.log(res);
           const token = res['token'];
+          const decodedJwt: any = jwt_decode(token);
           const displayName = res['displayName'];
           const settings = res['settings'];
           localStorage.setItem('currentUser', JSON.stringify({
+            _id: decodedJwt?.sub._id,
             username: user.username,
             displayName,
             token,

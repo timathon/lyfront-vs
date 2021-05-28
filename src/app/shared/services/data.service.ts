@@ -24,33 +24,17 @@ export class DataService {
     private calculatePatches: CalculatePatchesService
 
   ) {
-    this.dataVS = new DataVehicleSteel(this.http);
+    this.dataVS = new DataVehicleSteel(this.http, this.setHeaders, this.appConfig);
     this.dataCustomers = new DataCustomers(this.http, this.setHeaders, this.appConfig, this.calculatePatches);
     this.dataUsers = new DataUsers(this.http, this.setHeaders, this.appConfig, this.calculatePatches);
     this.dataPws = new DataPws(this.http, this.setHeaders, this.appConfig, this.calculatePatches);
     this.cacheInit();
   }
 
-  getPws() {
-    return of(localStorage.getItem('pws'))
-    .pipe(
-      switchMap(pws0 => {
-        if (pws0) {
-          return of(JSON.parse(pws0));
-        } else {
-          return this.dataPws.search({}).pipe(
-            tap(pws => {
-              localStorage.setItem('pws', JSON.stringify(pws));
-            })
-          )
-        }
-      })
-    );
-  }
   
   cacheInit() {
     forkJoin({
-      pws: this.getPws()
+      pws: this.dataPws.getPws()
     }).pipe(first()).subscribe(results => {
       this.cache = results;
     });

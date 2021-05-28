@@ -114,44 +114,76 @@
     <br>
     <mat-card>
       <mat-card-header>
-        <mat-card-title><small>验质信息</small></mat-card-title>
+        <mat-card-title>
+          <small>验质信息</small>
+          <span>&nbsp;&nbsp;&nbsp;</span>
+          <button mat-button color="primary" (click)="addMaterial()">添加物资</button>
+        </mat-card-title>
       </mat-card-header>
-      <mat-card-content formGroupName="survey">
-        <mat-form-field>
-          <mat-label>验质员</mat-label>
-          <input matInput formControlName="surveyedByName">
-        </mat-form-field>
-        <span>&nbsp;</span>
-        <mat-form-field>
-          <mat-label>验质日期</mat-label>
-          <input matInput type="date" formControlName="surveyedDate">
-        </mat-form-field>
-        <span>&nbsp;</span>
-        <mat-form-field>
-          <mat-label>验质时间</mat-label>
-          <input matInput type="time" formControlName="surveyedTime">
-        </mat-form-field>
-        <span>&nbsp;</span>
-        <button mat-raised-button color="primary" (click)="addMaterial()">添加物资</button>
-        <br>
-        <mat-card *ngFor="let material of materialsFormArray.controls; let i=index">
-          <mat-card-content>
-            <mat-form-field>
-              <mat-label>物资名称</mat-label>
-              <!-- <input matInput> -->
-              <!-- <input matInput [formControl]="getMaterialControl(i, 'pwsName')"> -->
-              <mat-select>
-                <mat-option *ngFor="let pw of selectedPws" [value]="pw._id">
-                  {{pw.name}}
-                </mat-option>
-              </mat-select>
-              <span matPrefix>{{i + 1}}&nbsp;&nbsp;</span>
-            </mat-form-field>
-            <span>&nbsp;</span>
-            <button mat-button color="accent" (click)="removeMaterial(i)" *ngIf="!!material.get('_id')?.value">删除</button>
+      <mat-card-content>
+        <div #formRows *ngFor="let material of materialsFormArray.controls; let i=index">
+          <mat-card>
+            <mat-card-content>
+              <mat-form-field>
+                <mat-label>物资名称</mat-label>
+                <!-- <input matInput> -->
+                <!-- <input matInput [formControl]="getMaterialControl(i, 'pwsName')"> -->
+                <mat-select [formControl]="$any(material.get('pw'))">
+                  <mat-option *ngFor="let pw of selectedPws" [value]="pw._id">
+                    {{pw.name}}
+                  </mat-option>
+                </mat-select>
+                <span matPrefix>{{i + 1}}&nbsp;&nbsp;</span>
+              </mat-form-field>
+              <span>&nbsp;</span>
+              <mat-form-field class="width-ten-vm">
+                <mat-label>重量（公斤）</mat-label>
+                <input matInput type="number" [formControl]="$any(material.get('weightKG'))">
+              </mat-form-field>
+              <span>&nbsp;</span>
+              <mat-form-field class="width-ten-vm">
+                <mat-label>数量</mat-label>
+                <input matInput type="number" [formControl]="$any(material.get('count'))">
+              </mat-form-field>
+              <span>&nbsp;</span>
+              <mat-form-field class="width-ten-vm">
+                <mat-label>金额（元）</mat-label>
+                <input matInput type="number" [formControl]="$any(material.get('cost'))">
+              </mat-form-field>
+              <br>
+              <mat-form-field class="width-fifty">
+                <mat-label>
+                  备注
+                </mat-label>
+                <textarea matInput [formControl]="$any(material.get('notes'))"></textarea>
+              </mat-form-field>
+              <span>&nbsp;</span>
+              <button mat-button color="accent" (click)="removeMaterial(i)"
+                *ngIf="!material.get('_id')?.value">删除</button>
 
-          </mat-card-content>
-        </mat-card>
+            </mat-card-content>
+          </mat-card>
+          <br>
+        </div>
+        <div formGroupName="survey">
+          <br>
+          <mat-form-field>
+            <mat-label>验质员</mat-label>
+            <input matInput formControlName="surveyedByName">
+            <mat-icon matPrefix>assignment_ind</mat-icon>
+          </mat-form-field>
+          <span>&nbsp;</span>
+          <mat-form-field>
+            <mat-label>验质日期</mat-label>
+            <input matInput type="date" formControlName="surveyedDate">
+          </mat-form-field>
+          <span>&nbsp;</span>
+          <mat-form-field>
+            <mat-label>验质时间</mat-label>
+            <input matInput type="time" formControlName="surveyedTime">
+          </mat-form-field>
+        </div>
+
       </mat-card-content>
     </mat-card>
     <br>
@@ -172,8 +204,9 @@
 
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button color="primary" mat-dialog-close>取消</button>
-  <button mat-raised-button color="primary" [mat-dialog-close]="true" [disabled]="vswsForm.invalid">保存</button>
+  <button mat-button color="primary" (click)="onCancel()">取消</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="vswsForm.invalid || materialsFormArray.invalid">保存</button>
 </mat-dialog-actions>
 
 <input style="display: none" [value]="status.observables.valueChanges | async">
+<input style="display: none" [value]="status.observables.valueChanges2 | async">

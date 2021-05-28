@@ -49,8 +49,8 @@ export class DataCustomers {
     }
   }
 
-  create(newCustomer: Customer) {
-    return this.http.post(this.apiURL, newCustomer, {
+  create(newOne: Customer) {
+    return this.http.post(this.apiURL, newOne, {
       headers: this.setHeaders(true)
     });
   }

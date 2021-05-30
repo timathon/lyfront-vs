@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { VehicleSteelWeighingSurvey } from '@app/shared/services/data/data-vehicle-steel';
 import { VehicleSteelWeighingSurveyDialogService } from '@app/vehicle-steel/vehicle-steel-weighing-survey-dialog/vehicle-steel-weighing-survey-dialog.service';
+import { switchMap } from 'rxjs/operators';
 
 
 @Component({
@@ -28,6 +29,22 @@ export class VehicleSteelWeighingSurveyRecentComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  onEdit(item: any) {
+    console.log('on edit');
+    this.vswsDialog.openDialog(item)
+      .pipe(
+        switchMap(dialogRef => {
+          return dialogRef.afterClosed();
+        })
+      )
+      .subscribe(result => {
+        console.log({editResult: result});
+        // if changed, reload recent
+      })
+  }
+
+
 
 
 }

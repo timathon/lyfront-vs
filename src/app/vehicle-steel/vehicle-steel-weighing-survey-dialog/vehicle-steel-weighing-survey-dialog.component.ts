@@ -1,8 +1,8 @@
 import { Component, OnInit, Inject, ViewChildren, ElementRef, QueryList } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { VehicleSteelWeighingSurvey } from '@app/shared/services/data/data-vehicle-steel';
-import { Observable, of, Subscription } from 'rxjs';
+import { Observable, of, Subject, Subscription } from 'rxjs';
 import { DataService } from '@app/shared/services/data.service';
 import { filter, first, map, startWith, switchMap, tap } from 'rxjs/operators';
 import { Customer } from '@app/shared/services/data/data-customers';
@@ -42,7 +42,9 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit {
       valueChanges2: of(null), // valueChanges for materialsFormArray
     },
     netWeightKG: 0,
-    lastValue: new VehicleSteelWeighingSurvey()
+    lastValue: {
+      outWeightKG: 0
+    }
   }
   @ViewChildren('formRows') materialRows: QueryList<ElementRef> | undefined;
   objectTemplate = {
@@ -66,25 +68,26 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit {
     }
   };
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { vsws: VehicleSteelWeighingSurvey, pws: any[] },
+    @Inject(MAT_DIALOG_DATA) public data: { vsws: VehicleSteelWeighingSurvey, pws: any[], changesSaved$$: Subject<any> },
     private fb: FormBuilder,
     private backend: DataService,
     public customerDialog: CustomerDialogServiceService,
     private auth: AuthService,
     private alert: AlertService,
-    private calculatePatches: CalculatePatchesService
+    private calculatePatches: CalculatePatchesService,
+    private dialogRef: MatDialogRef<VehicleSteelWeighingSurveyDialogComponent>,
   ) {
     this.selectedPws = this.data.pws.filter(pw => pw.name.indexOf('废钢') > -1 && pw.name.indexOf('公斤') > -1);
     console.log(this.selectedPws);
     console.log(this.data.vsws);
-    this.status.lastValue = this.data.vsws;
+    this.status.lastValue.outWeightKG = this.data.vsws.weighing.outWeightKG;
     this.status.netWeightKG = this.data.vsws.weighing.outWeightKG && this.data.vsws.weighing.inWeightKG ?
       this.data.vsws.weighing.outWeightKG - this.data.vsws.weighing.inWeightKG :
       0;
-    if (this.data.vsws.survey && this.data.vsws.survey.materials.length) {
+    if (this.data.vsws.survey.materials && this.data.vsws.survey.materials.length) {
       this.materialsFormArray = this.fb.array(this.data.vsws.survey.materials?.map(material => this.fb.group({
         _id: material._id,
-        pw: [{value: material.pw, disabled: true}],
+        pw: [{ value: material.pw, disabled: true }],
         weightKG: material.weightKG,
         count: material.count,
         cost: material.cost,
@@ -103,18 +106,18 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit {
         truckPlateNo: [{
           value: this.data.vsws.weighing.truckPlateNo, disabled: !!this.data.vsws.weighing.truckPlateNo
         }, [Validators.required, Validators.minLength(7)]],
-        customerId: [this.data.vsws.weighing.customerId, Validators.required],
+        customerId: this.data.vsws.weighing.customerId,
         customerName: [{
           value: this.data.vsws.weighing.customerName, disabled: !!this.data.vsws.weighing.customerName
-        }, Validators.required],
+        }],
         customerTel: [{
           value: this.data.vsws.weighing.customerTel, disabled: true
-        }, Validators.required],
+        }],
         inWeightKG: [{
           value: this.data.vsws.weighing.inWeightKG, disabled: false
         }],
-        inWeighedDate: this.data.vsws.weighing.inWeighedAt ? (this.data.vsws.weighing.inWeighedAt).toISOString().substring(0, 10) : '',
-        inWeighedTime: this.data.vsws.weighing.inWeighedAt ? (this.data.vsws.weighing.inWeighedAt).toTimeString().substring(0, 5) : '',
+        inWeighedDate: this.data.vsws.weighing.inWeighedAt ? (new Date(this.data.vsws.weighing.inWeighedAt)).toLocaleDateString().split('/').map(item => item.padStart(2, '0')).join('-') : '',
+        inWeighedTime: this.data.vsws.weighing.inWeighedAt ? (new Date(this.data.vsws.weighing.inWeighedAt)).toTimeString().substring(0, 5) : '',
         inWeighedBy: this.data.vsws.weighing.inWeighedBy,
         inWeighedByName: [{
           value: this.data.vsws.weighing.inWeighedByName,
@@ -123,11 +126,11 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit {
         outWeightKG: [{
           value: this.data.vsws.weighing.outWeightKG, disabled: false
         }],
-        outWeighedDate: this.data.vsws.weighing.outWeighedAt ? (this.data.vsws.weighing.outWeighedAt).toISOString().substring(0, 10) : '',
-        outWeighedTime: this.data.vsws.weighing.outWeighedAt ? (this.data.vsws.weighing.outWeighedAt).toTimeString().substring(0, 5) : '',
+        outWeighedDate: this.data.vsws.weighing.outWeighedAt ? (new Date(this.data.vsws.weighing.outWeighedAt)).toISOString().substring(0, 10) : '',
+        outWeighedTime: this.data.vsws.weighing.outWeighedAt ? (new Date(this.data.vsws.weighing.outWeighedAt)).toTimeString().substring(0, 5) : '',
         outWeighedBy: this.data.vsws.weighing.outWeighedBy,
         outWeighedByName: [{
-          value: this.data.vsws.weighing.inWeighedByName,
+          value: this.data.vsws.weighing.outWeighedByName,
           disabled: true
         }],
         notes: this.data.vsws.weighing.notes
@@ -164,16 +167,16 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit {
           console.log({
             materialsFormArrayValue: value
           });
-           
+
           const materialsFormValue = this.materialsFormArray.getRawValue();
           materialsFormValue.forEach((materialX, index) => {
             // check if pwName includes 发动机
             const pwFound = this.selectedPws.find(pw => pw._id === materialX.pw);
             if (pwFound && pwFound.name.indexOf('发动机') > -1) {
               // console.log(index, '发动机')
-              this.materialsFormArray.controls[index].get('count')?.enable({emitEvent: false});
+              this.materialsFormArray.controls[index].get('count')?.enable({ emitEvent: false });
             } else {
-              this.materialsFormArray.controls[index].get('count')?.disable({emitEvent: false});
+              this.materialsFormArray.controls[index].get('count')?.disable({ emitEvent: false });
             }
           })
         })
@@ -182,21 +185,21 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit {
       .pipe(
         tap((value: any) => {
           // when inWeightKG changed from '' to number, set data time and inWeighedBy
-          const initInWeightKG = this.status.lastValue.weighing.inWeightKG;
+          // const initInWeightKG = this.status.lastValue.weighing.inWeightKG;
           const newInWeightKG = value.weighing.inWeightKG;
-          if (!initInWeightKG && newInWeightKG) {
-            const thatDate = new Date();
-            this.vswsForm.patchValue({
-              weighing: {
-                inWeighedDate: thatDate.toISOString().substring(0, 10),
-                inWeighedTime: thatDate.toTimeString().substring(0, 5),
-                inWeighedBy: this.auth.getCurrentUser()?._id,
-                inWeighedByName: this.auth.getCurrentUser()?.displayName,
-              }
-            }, { emitEvent: false });
-          }
+          // if (!initInWeightKG && newInWeightKG) {
+          //   const thatDate = new Date();
+          //   this.vswsForm.patchValue({
+          //     weighing: {
+          //       inWeighedDate: thatDate.toISOString().substring(0, 10),
+          //       inWeighedTime: thatDate.toTimeString().substring(0, 5),
+          //       inWeighedBy: this.auth.getCurrentUser()?._id,
+          //       inWeighedByName: this.auth.getCurrentUser()?.displayName,
+          //     }
+          //   }, { emitEvent: false });
+          // }
           // console.log({user: this.auth.getCurrentUser()})
-          const initOutWeightKG = this.status.lastValue.weighing.outWeightKG;
+          const initOutWeightKG = this.status.lastValue.outWeightKG;
           const newOutWeightKG = value.weighing.outWeightKG;
           if (!initOutWeightKG && newOutWeightKG) {
             const thatDate = new Date();
@@ -208,6 +211,7 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit {
                 outWeighedByName: this.auth.getCurrentUser()?.displayName,
               }
             }, { emitEvent: false });
+            this.status.lastValue.outWeightKG = newOutWeightKG;
           }
           this.status.netWeightKG = newInWeightKG - newOutWeightKG;
 
@@ -220,42 +224,42 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit {
           }
         })
       )
-    if (!this.data.vsws._id) {
-      // if create new vsws, when keying in customerName, find by regex and autoComplete
-      this.possibleCustomers$ = this.vswsForm.get('weighing.customerName')?.valueChanges
-        .pipe(
-          startWith(this.vswsForm.get('weighing.customerName')?.value),
-          switchMap(customerNameX => {
-            this.loadingPossibleCustomers = true;
-            if (!customerNameX) {
-              return of([]).pipe(
-                map(customers => ({ customerNameX, possibleCustomers: customers }))
-              )
-            } else {
-              return this.backend.dataCustomers.search({ name: { $regex: `.*${customerNameX}.*` } }).pipe(
-                map(customers => ({ customerNameX, possibleCustomers: customers }))
-              )
-            }
-          }),
-          tap((combo) => {
-            console.log(combo);
-            const foundMatchCustomer = combo.possibleCustomers.find(pC => pC.name === combo.customerNameX);
-            this.status.showNewCustomerButton = !!this.vswsForm.get('weighing.customerName')?.dirty && (!combo.customerNameX || (!!combo.customerNameX && !foundMatchCustomer));
-            this.disableEditCustomerButton = !combo.customerNameX;
-            // console.log(possibleCustomers);
-            // set customerTel
-            if (foundMatchCustomer) {
-              this.customer = foundMatchCustomer;
-              this.vswsForm.patchValue({
-                weighing: {
-                  customerTel: foundMatchCustomer?.mobile,
-                  customerId: foundMatchCustomer?._id,
-                }
-              })
-              // this.vswsForm.get('weighing.customerTel')?.setValue(foundMatchCustomer?.mobile);
-              // this.vswsForm.get('weighing.customerId')?.setValue(foundMatchCustomer?._id);
-              // this.vswsForm.get('weighing.customerName')?.setErrors(null); // angular form will reset error on any changes
-            } else {
+    // if create new vsws, when keying in customerName, find by regex and autoComplete
+    this.possibleCustomers$ = this.vswsForm.get('weighing.customerName')?.valueChanges
+      .pipe(
+        startWith(this.vswsForm.get('weighing.customerName')?.value),
+        switchMap(customerNameX => {
+          this.loadingPossibleCustomers = true;
+          if (!customerNameX) {
+            return of([]).pipe(
+              map(customers => ({ customerNameX, possibleCustomers: customers }))
+            )
+          } else {
+            return this.backend.dataCustomers.search({ name: { $regex: `.*${customerNameX}.*` } }).pipe(
+              map(customers => ({ customerNameX, possibleCustomers: customers }))
+            )
+          }
+        }),
+        tap((combo) => {
+          console.log(combo);
+          const foundMatchCustomer = combo.possibleCustomers.find(pC => pC.name === combo.customerNameX);
+          this.status.showNewCustomerButton = !!this.vswsForm.get('weighing.customerName')?.dirty && (!combo.customerNameX || (!!combo.customerNameX && !foundMatchCustomer));
+          this.disableEditCustomerButton = !combo.customerNameX;
+          // console.log(possibleCustomers);
+          // set customerTel
+          if (foundMatchCustomer) {
+            this.customer = foundMatchCustomer;
+            this.vswsForm.patchValue({
+              weighing: {
+                customerTel: foundMatchCustomer?.mobile,
+                customerId: foundMatchCustomer?._id,
+              }
+            })
+            // this.vswsForm.get('weighing.customerTel')?.setValue(foundMatchCustomer?.mobile);
+            // this.vswsForm.get('weighing.customerId')?.setValue(foundMatchCustomer?._id);
+            // this.vswsForm.get('weighing.customerName')?.setErrors(null); // angular form will reset error on any changes
+          } else {
+            if (this.vswsForm.get('weighing.customerName')?.value) {
               this.vswsForm.get('weighing.customerName')?.setErrors({
                 notFound: true
               });
@@ -266,13 +270,12 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit {
               this.vswsForm.get('weighing.customerTel')?.setValue('');
               this.vswsForm.get('weighing.customerId')?.setValue('');
             }
-            this.loadingPossibleCustomers = false;
-          }),
-          map((combo) => combo.possibleCustomers)
-        )
-    } else {
-      this.possibleCustomers$ = of([]);
-    }
+          }
+          this.loadingPossibleCustomers = false;
+        }),
+        map((combo) => combo.possibleCustomers)
+      )
+
   }
 
   getMaterialControl(index: number, controlName: string) {
@@ -297,7 +300,7 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit {
       const newFormItem = this.fb.group({
         pw: ['', Validators.required],
         weightKG: [0, Validators.min(0.1)],
-        count: [{value: 0, disabled: true}],
+        count: [{ value: 0, disabled: true }],
         cost: 0,
         notes: ''
       });
@@ -318,7 +321,7 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit {
 
   removeMaterial(index: number) {
     this.materialsFormArray.removeAt(index);
-    
+
     // clear surveyedBy, if 0 material
     if (!this.materialsFormArray.controls.length) {
       this.vswsForm.patchValue({
@@ -343,43 +346,101 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit {
     });
   }
 
-  onCancel() {
+  preparePatches() {
+    const newObject = this.vswsForm.getRawValue();
+    const oldObject = this.data.vsws;
+
+    // prepareData
+    if (newObject.weighing.inWeighedDate && newObject.weighing.inWeighedTime) {
+      newObject.weighing.inWeighedAt = (new Date(newObject.weighing.inWeighedDate + ' ' + newObject.weighing.inWeighedTime)).toISOString();
+    }
+    if (newObject.weighing.outWeighedDate && newObject.weighing.outWeighedTime) {
+      newObject.weighing.outWeighedAt = (new Date(newObject.weighing.outWeighedDate + ' ' + newObject.weighing.outWeighedTime)).toISOString();
+    }
+    if (newObject.survey.surveyedDate && newObject.survey.surveyedTime) {
+      newObject.survey.surveyedAt = (new Date(newObject.survey.surveyedDate + ' ' + newObject.survey.surveyedTime)).toISOString();
+    }
+    const vswsPatches = this.calculatePatches.calculatePatches({
+      oldObject,
+      newObject,
+      objectTemplate: this.objectTemplate
+    });
+
+    return {
+      vswsPatches,
+      newObject,
+      oldObject
+    };
 
   }
 
-  onSubmit() {
-    const newObject = this.vswsForm.getRawValue();
-    // prepareData
-    if (newObject.weighing.inWeighedDate && newObject.weighing.inWeighedTime) {
-      newObject.weighing.inWeighedAt = new Date(newObject.weighing.inWeighedDate + ' ' + newObject.weighing.inWeighedTime);
+  onCancel() {
+    const patches = this.preparePatches().vswsPatches;
+    if (patches.length) {
+      // alert changed
+      const alertDialogRef = this.alert.openDialog({
+        title: '内容已变更',
+        message: '是否放弃更改？'
+      });
+      alertDialogRef.afterClosed().pipe(
+        first()
+      ).subscribe(alertConfirmed => {
+        if (alertConfirmed) {
+          // confirm discarding the changes
+          this.dialogRef.close();
+        } // else do nothing, go on editing
+      })
+    } else {
+      console.log('no change');
+      this.dialogRef.close();
     }
-    if (newObject.weighing.outWeighedDate && newObject.weighing.outWeighedTime) {
-      newObject.weighing.outWeighedAt = new Date(newObject.weighing.outWeighedDate + ' ' + newObject.weighing.outWeighedTime);
-    }
-    if (newObject.survey.surveyedDate && newObject.survey.surveyedTime) {
-      newObject.survey.surveyedAt = new Date(newObject.survey.surveyedDate + ' ' + newObject.survey.surveyedTime);
-    }
+  }
 
-    const oldObject = this.data.vsws;
+  onSubmit() {
+    const {newObject, oldObject, vswsPatches} = this.preparePatches();
+
     console.log({
       old: oldObject,
       new: newObject,
     })
 
     if (oldObject._id) {
-      const vswsPatches = this.calculatePatches.calculatePatches({
-        oldObject,
-        newObject,
-        objectTemplate: this.objectTemplate
-      });
-      console.log(JSON.stringify(vswsPatches, null, 2));
+      // patch object
+      console.log(vswsPatches);
+      if (!vswsPatches.length) {
+        this.alert.openDialog({
+          title: '无变动',
+          message: '内容没有任何变动，无需保存',
+          okOnly: true
+        })
+      } else {
+        this.backend.dataVS.update({
+          _id: oldObject._id,
+          vswsPatches: vswsPatches
+        }).pipe(
+          first()
+        )
+        .subscribe(res => {
+          console.log({
+            vswsPatchResult: res
+          });
+          // close dialog, update recent
+          this.dialogRef.close({
+            changesSaved: true
+          });
+          this.data.changesSaved$$.next();
+        })
+      }
     } else {
+      // create object
       this.backend.dataVS.insert(this.calculatePatches.trimObject(newObject, this.objectTemplate) as VehicleSteelWeighingSurvey)
         .pipe(
           first()
         )
         .subscribe(res => {
-          console.log({res});
+          console.log({ res });
+          this.data.changesSaved$$.next();
+
           // colse dialog
           // refresh recent
         })

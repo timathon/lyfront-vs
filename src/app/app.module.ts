@@ -1,4 +1,6 @@
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule, APP_INITIALIZER, LOCALE_ID } from '@angular/core';
+import { registerLocaleData  } from '@angular/common';
+import localeZh from '@angular/common/locales/zh';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -8,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
 import { APP_CONFIG } from './app.config';
 
+registerLocaleData(localeZh, 'zh');
 
 export function appConfigFac() {
   function prepareUrl() {
@@ -37,7 +40,8 @@ export function appConfigFac() {
     BrowserAnimationsModule,
     SharedModule
   ],
-  providers: [{
+  providers: [{ provide: LOCALE_ID, useValue: 'zh' },
+  {
     provide: APP_CONFIG,
     useFactory: appConfigFac
   }],

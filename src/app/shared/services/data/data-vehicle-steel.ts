@@ -1,18 +1,20 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface VehicleSteelWeighing {
   truckPlateNo: string,
   customerId?: any,
   customerName?: string, // delete before patch
   customerTel?: string, // delete before patch
-  inWeightKG?: number,
+  inWeightKG: number,
   inWeighedAt?: Date,
   inWeighedBy?: any,
   inWeighedByName?: string,
-  outWeightKG?: number,
+  outWeightKG: number,
   outWeighedAt?: Date,
   outWeighedBy?: any,
+  outWeighedByName?: any,
   notes?: string
 }
 
@@ -53,8 +55,12 @@ export class VehicleSteelWeighingSurvey {
   deletedNotes?: any = null;
   weighing: VehicleSteelWeighing = {
     truckPlateNo: '',
+    customerId: '',
     notes: '',
+    inWeightKG: 0,
     inWeighedBy: '',
+    inWeighedAt: new Date(),
+    outWeightKG: 0,
     outWeighedBy: ''
   };
   survey: VehicleSteelSurvey = {
@@ -62,8 +68,8 @@ export class VehicleSteelWeighingSurvey {
     materials: []
   }
   changeLogs?: any[] = []; // delete before patch
-  constructor() {
-
+  constructor(/* creatorUserId: any */) {
+    // this.weighing.inWeighedBy = creatorUserId;
   }
 }
 
@@ -71,39 +77,7 @@ export class VehicleSteelWeighingSurvey {
 export class DataVehicleSteel {
   apiURL = this.appConfig.backendUrl + '/api/vehicle-steel';
 
-  weighingSurveyEntries: VehicleSteelWeighingSurvey[] = [
-    {
-      _id: 1,
-      weighing: {
-        truckPlateNo: '辽N12121',
-        customerId: '5a328e6ae2870c00146a5065',
-        inWeightKG: 2000,
-        inWeighedBy: '59251ad024ac463e20bee3a7',
-        outWeightKG: 1000,
-        outWeighedBy: '59251ad024ac463e20bee3a7',
-        notes: 'abc'
-      },
-      survey: {
-        surveyedAt: new Date('2021-5-24'),
-        materials: [
-          { weightKG: 10 }
-        ]
-      }
-    },
-    {
-      _id: 2,
-      weighing: {
-        truckPlateNo: '辽N90909',
-        customerId: '5a328e6ae2870c00146a5065',
-        inWeighedBy: '59251ad024ac463e20bee3a7',
-        outWeighedBy: '59251ad024ac463e20bee3a7',
 
-      },
-      survey: {
-        materials: []
-      }
-    }
-  ];
   constructor(
     private http: HttpClient,
     private setHeaders: (withJWT: boolean) => HttpHeaders | {
@@ -115,13 +89,53 @@ export class DataVehicleSteel {
   }
 
   getRecent(): Observable<VehicleSteelWeighingSurvey[]> {
-    return of(this.weighingSurveyEntries);
+    // get items 
+    // 1) inWeighed within 7 days; 
+    // 2) inWeighed 7 days earlier and survey not done
+
+    const dateX = new Date();
+    dateX.setDate(dateX.getDate() - 6);
+    const dateBeginningX = new Date(dateX.toISOString().substr(0, 10));
+    dateBeginningX.setHours(0); // 00hours of +8000
+    const query1 = { createdAt: { $gte: new Date(dateBeginningX) } };
+    const query2 = {
+      createdAt: { $lt: new Date(dateBeginningX) },
+      'survey.surveyedBy': ''
+    };
+
+    return forkJoin({
+      within7days: this.search(query1),
+      over7daysNotSurveyed: this.search(query2)
+    }).pipe(
+      map(result => {
+        return [...result.within7days, ...result.over7daysNotSurveyed]
+      })
+    )
+
+    // return of(this.weighingSurveyEntries);
   }
 
   insert(newOne: VehicleSteelWeighingSurvey) {
     return this.http.post(this.apiURL, newOne, {
       headers: this.setHeaders(true)
     });
+  }
+
+  update(patchesObj: {
+    _id: string,
+    vswsPatches?: any[],
+    materials?: {_id?: string, obj?: any, patches?: any[]}[]
+  }) {
+    console.log(patchesObj)
+    return this.http.patch(this.apiURL + '/one', patchesObj, {
+      headers: this.setHeaders(true)
+    }) as Observable<any>;
+  }
+
+  search(searchParams: { [key: string]: any }): Observable<VehicleSteelWeighingSurvey[]> {
+    return this.http.post(this.apiURL + '/search', searchParams, {
+      headers: this.setHeaders(true)
+    }) as Observable<VehicleSteelWeighingSurvey[]>;
   }
 
 

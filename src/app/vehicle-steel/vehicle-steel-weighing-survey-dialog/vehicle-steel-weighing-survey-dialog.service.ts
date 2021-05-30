@@ -1,21 +1,23 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LoadingComponent } from '@app/shared/components/loading/loading.component';
+import { AuthService } from '@app/shared/services/auth.service';
 import { DataService } from '@app/shared/services/data.service';
 import { Customer } from '@app/shared/services/data/data-customers';
 import { User } from '@app/shared/services/data/data-users';
 import { VehicleSteelWeighingSurvey } from '@app/shared/services/data/data-vehicle-steel';
-import { forkJoin, of } from 'rxjs';
+import { forkJoin, of, Subject } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
 import { VehicleSteelWeighingSurveyDialogComponent } from './vehicle-steel-weighing-survey-dialog.component';
 
 
 @Injectable()
 export class VehicleSteelWeighingSurveyDialogService {
-
+  public changesSaved$$ = new Subject();
   constructor(
     private dialog: MatDialog,
-    private backend: DataService
+    private backend: DataService,
+    private auth: AuthService
   ) { }
 
   openDialog(vsws?: VehicleSteelWeighingSurvey) {
@@ -23,14 +25,18 @@ export class VehicleSteelWeighingSurveyDialogService {
     console.log(vsws);
     const prepareVSWS = (vsws?: VehicleSteelWeighingSurvey) => {
       if (!vsws) {
-        return of(new VehicleSteelWeighingSurvey());
+        const currUser = this.auth.getCurrentUser();
+        const newVSWS = new VehicleSteelWeighingSurvey();
+        newVSWS.weighing.inWeighedBy = currUser?._id;
+        newVSWS.weighing.inWeighedByName = currUser?.displayName;
+        return of(newVSWS);
       } else {
         // show 'loading...' before data is ready
         const loadingDialogRef = this.dialog.open(LoadingComponent, {
           disableClose: true
         });
         const getDetails = forkJoin({
-          customer: this.backend.dataCustomers.search({ _id: vsws.weighing.customerId }).pipe(
+          customer: vsws.weighing.customerId ? this.backend.dataCustomers.search({ _id: vsws.weighing.customerId }).pipe(
             map((customers: Customer[]) => {
               if (customers.length) {
                 return customers[0];
@@ -38,8 +44,8 @@ export class VehicleSteelWeighingSurveyDialogService {
                 return null;
               }
             })
-          ),
-          inWeighedBy: this.backend.dataUsers.search({ _id: vsws.weighing.inWeighedBy }).pipe(
+          ) : of(null),
+          inWeighedBy: vsws.weighing.inWeighedBy ? this.backend.dataUsers.search({ _id: vsws.weighing.inWeighedBy }).pipe(
             map((users: User[]) => {
               console.log(users);
               if (users.length) {
@@ -48,25 +54,27 @@ export class VehicleSteelWeighingSurveyDialogService {
                 return null;
               }
             })
-          ),
-          surveyedBy: of(null).pipe(
-            switchMap(() => {
-              if (vsws.survey.surveyedBy) {
-                return this.backend.dataUsers.search({ _id: vsws.survey.surveyedBy }).pipe(
-                  map((users: User[]) => {
-                    console.log(users);
-                    if (users.length) {
-                      return users[0];
-                    } else {
-                      return null;
-                    }
-                  })
-                )
+          ) : of(null),
+          outWeighedBy: vsws.weighing.outWeighedBy ? this.backend.dataUsers.search({ _id: vsws.weighing.outWeighedBy }).pipe(
+            map((users: User[]) => {
+              console.log(users);
+              if (users.length) {
+                return users[0];
               } else {
-                return of(null)
+                return null;
               }
             })
-          )
+          ) : of(null),
+          surveyedBy: vsws.survey.surveyedBy ? this.backend.dataUsers.search({ _id: vsws.survey.surveyedBy }).pipe(
+            map((users: User[]) => {
+              console.log(users);
+              if (users.length) {
+                return users[0];
+              } else {
+                return null;
+              }
+            })
+          ) : of(null)
         });
         // get the customer details
         return getDetails
@@ -79,6 +87,9 @@ export class VehicleSteelWeighingSurveyDialogService {
               if (result.inWeighedBy) {
                 vsws.weighing.inWeighedByName = result.inWeighedBy.displayName;
               }
+              if (result.outWeighedBy) {
+                vsws.weighing.outWeighedByName = result.outWeighedBy.displayName;
+              }
               if (result.surveyedBy) {
                 vsws.survey.surveyedByName = result.surveyedBy.displayName;
               }
@@ -89,20 +100,24 @@ export class VehicleSteelWeighingSurveyDialogService {
         // return of(vsws);
       }
     }
-    forkJoin({
+    return forkJoin({
       vsws: prepareVSWS(vsws),
       pws: this.backend.dataPws.getPws()
     })
-    .pipe(first()).subscribe(combo => {
-      const dialogRef = this.dialog.open(VehicleSteelWeighingSurveyDialogComponent, {
-        disableClose: true,
-        data: combo,
-        // width: '50vw'
-        backdropClass: 'full-width' // todo
-      });
-      dialogRef.afterClosed().subscribe(result => {
-        console.log(`Dialog result: ${result}`);
-      });
-    })
+      .pipe(
+        first(),
+        map(combo => {
+          const dialogRef = this.dialog.open(VehicleSteelWeighingSurveyDialogComponent, {
+            disableClose: true,
+            data: {
+              ...combo,
+              changesSaved$$: this.changesSaved$$
+            },
+            // width: '50vw'
+            backdropClass: 'full-width' // todo
+          });
+          return dialogRef;
+        })
+      )
   }
 }

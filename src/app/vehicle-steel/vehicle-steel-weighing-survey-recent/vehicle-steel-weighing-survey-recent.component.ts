@@ -15,7 +15,7 @@ export class VehicleSteelWeighingSurveyRecentComponent implements OnInit {
   @Input() vswsRecentList: VehicleSteelWeighingSurvey[] = [];
   // vswsRecentList$: Observable<VehicleSteelWeighingSurvey[]>
   displayedColumns: string[] = [
-    '_id', 'truckPlateNo', /* 'grossWeight',  */'surveyDone', 'edit'
+    '_id', 'truckPlateNo', 'netWeight', 'surveyDone', 'edit'
   ];
   constructor(
     // private backend: DataService,

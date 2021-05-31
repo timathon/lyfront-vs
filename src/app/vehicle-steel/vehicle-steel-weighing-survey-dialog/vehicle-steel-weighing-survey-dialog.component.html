@@ -102,6 +102,9 @@
         <button mat-button color="warn" *ngIf="vswsForm.errors">
           {{vswsForm.errors?.weightError ? '皮重不能大于毛重' : ''}}
         </button>
+        <button mat-button color="warn" *ngIf="vswsForm.errors">
+          {{vswsForm.errors?.weightError2 ? '物资总重不能大于过磅净重' : ''}}
+        </button>
         <br>
         <mat-form-field class="width-fifty">
           <mat-label>
@@ -118,7 +121,30 @@
         <mat-card-title>
           <small>验质信息</small>
           <span>&nbsp;&nbsp;&nbsp;</span>
-          <button mat-button color="primary" (click)="addMaterial()">添加物资</button>
+          <small>
+
+            <small>
+              <button mat-button>【{{materialsFormArray.controls.length}}项】</button>
+              <button mat-button *ngIf="status.materialTotalWeight <= status.netWeightKG">【{{status.materialTotalWeight}}公斤】</button>
+              <button mat-button *ngIf="status.materialTotalWeight > status.netWeightKG" color="warn">【{{status.materialTotalWeight}}公斤】</button>
+              <button mat-button>【{{status.materialTotalCost}}元】</button>
+              </small>
+          </small>
+          <span>&nbsp;&nbsp;&nbsp;</span>
+          <button mat-button color="primary" (click)="addMaterial()" [disabled]="
+          !$any(vswsForm.get('weighing.inWeightKG')).value || !$any(vswsForm.get('weighing.outWeightKG')).value ||
+          ($any(vswsForm.get('weighing.inWeightKG')).value - $any(vswsForm.get('weighing.outWeightKG')).value <= 0)
+          ">添加物资</button>
+          <span>&nbsp;&nbsp;&nbsp;</span>
+          <button mat-button *ngIf="
+          !$any(vswsForm.get('weighing.inWeightKG')).value || !$any(vswsForm.get('weighing.outWeightKG')).value ||
+          ($any(vswsForm.get('weighing.inWeightKG')).value - $any(vswsForm.get('weighing.outWeightKG')).value <= 0)
+          ">
+            添加物资前，请录入有效过磅数据
+          </button>
+          <button mat-button color="warn" *ngIf="false">
+            物资总重不能大于过磅净重
+          </button>
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
@@ -129,7 +155,7 @@
                 <mat-label>物资名称</mat-label>
                 <!-- <input matInput> -->
                 <!-- <input matInput [formControl]="getMaterialControl(i, 'pwsName')"> -->
-                <mat-select [formControl]="$any(material.get('pw'))">
+                <mat-select [formControl]="$any(material.get('pwId'))">
                   <mat-option *ngFor="let pw of selectedPws" [value]="pw._id">
                     {{pw.name}}
                   </mat-option>
@@ -160,7 +186,7 @@
               </mat-form-field>
               <span>&nbsp;</span>
               <button mat-button color="accent" (click)="removeMaterial(i)"
-                *ngIf="!material.get('_id')?.value">删除</button>
+                *ngIf="!material.get('inventoryId')?.value">删除</button>
 
             </mat-card-content>
           </mat-card>
@@ -206,8 +232,8 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button color="primary" (click)="onCancel()">取消</button>
-  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="vswsForm.invalid || materialsFormArray.invalid">保存</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()"
+    [disabled]="vswsForm.invalid || materialsFormArray.invalid">保存</button>
 </mat-dialog-actions>
 
 <input style="display: none" [value]="status.observables.valueChanges | async">
-<input style="display: none" [value]="status.observables.valueChanges2 | async">

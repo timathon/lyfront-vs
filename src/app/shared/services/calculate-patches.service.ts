@@ -58,12 +58,17 @@ export class CalculatePatchesService {
         patchesPrepare = jsonpatch.compare(
           this.trimObject(input.oldObject, input.objectTemplate),
           this.trimObject(input.newObject, input.objectTemplate),
-        );;
+        );
       } else {
         throw ('bad option for calculate patches');
       }
 
     }
-    return patchesPrepare;
+    return patchesPrepare.map(patch => {
+      if (patch.op === 'add') {
+        (patch as any).op = 'replace';
+      }
+      return patch;
+    });
   }
 }

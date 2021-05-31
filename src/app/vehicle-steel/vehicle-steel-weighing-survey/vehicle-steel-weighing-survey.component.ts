@@ -21,6 +21,19 @@ export class VehicleSteelWeighingSurveyComponent implements OnInit {
     public vswsDialog: VehicleSteelWeighingSurveyDialogService
   ) { }
 
+  onCreate() {
+    this.vswsDialog.openDialog()
+      .pipe(
+        switchMap(dialogRef => {
+          return dialogRef.afterClosed();
+        })
+      )
+      .subscribe(result => {
+        console.log({editResult: result});
+        // if changed, reload recent
+      })
+  }
+
   ngOnInit(): void {
     const loadingDialogRef = this.dialog.open(LoadingComponent, {
       disableClose: true,

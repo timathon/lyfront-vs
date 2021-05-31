@@ -25,10 +25,10 @@ export class VehicleSteelWeighingSurveyDialogService {
     console.log(vsws);
     const prepareVSWS = (vsws?: VehicleSteelWeighingSurvey) => {
       if (!vsws) {
-        const currUser = this.auth.getCurrentUser();
         const newVSWS = new VehicleSteelWeighingSurvey();
-        newVSWS.weighing.inWeighedBy = currUser?._id;
-        newVSWS.weighing.inWeighedByName = currUser?.displayName;
+        // const currUser = this.auth.getCurrentUser();
+        // newVSWS.weighing.inWeighedBy = currUser?._id;
+        // newVSWS.weighing.inWeighedByName = currUser?.displayName;
         return of(newVSWS);
       } else {
         // show 'loading...' before data is ready

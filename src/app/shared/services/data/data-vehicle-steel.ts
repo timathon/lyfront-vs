@@ -27,7 +27,7 @@ export interface VehicleSteelSurvey {
 
 export class SurveyedMaterial {
   _id?: any;
-  pw?: any;
+  pwId?: any;
   weightKG?: number;
   count?: number;
   cost?: number;

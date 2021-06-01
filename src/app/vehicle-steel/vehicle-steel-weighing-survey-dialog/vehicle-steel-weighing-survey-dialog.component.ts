@@ -458,13 +458,13 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit {
           })
       }
     } else {
+      // create object
       const loadingDialogRef2 = this.dialog.open(LoadingComponent, {
         disableClose: true,
         data: {
           message: '正在保存...'
         }
       });
-      // create object
       this.backend.dataVS.insert(this.calculatePatches.trimObject(newObject, this.objectTemplate) as VehicleSteelWeighingSurvey)
         .pipe(
           first()

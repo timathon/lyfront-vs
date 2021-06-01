@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { DataService } from "@app/shared/services/data.service";
 import { VehicleSteelWeighingSurvey } from '@app/shared/services/data/data-vehicle-steel';
-import { VehicleSteelWeighingSurveyDialogComponent } from '../vehicle-steel-weighing-survey-dialog/vehicle-steel-weighing-survey-dialog.component';
+import { VehicleSteelWeighingSurveyDialogService } from '@app/vehicle-steel/vehicle-steel-weighing-survey-dialog/vehicle-steel-weighing-survey-dialog.service';
+import { switchMap } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-vehicle-steel-weighing-survey-recent',
@@ -14,11 +15,13 @@ export class VehicleSteelWeighingSurveyRecentComponent implements OnInit {
   @Input() vswsRecentList: VehicleSteelWeighingSurvey[] = [];
   // vswsRecentList$: Observable<VehicleSteelWeighingSurvey[]>
   displayedColumns: string[] = [
-    'id', 'truckPlateNo', 'grossWeight', 'surveyDone', 'edit'
+    '_id', 'truckPlateNo', 'netWeight', 'surveyDone', 'edit'
   ];
   constructor(
     // private backend: DataService,
     public dialog: MatDialog,
+    public vswsDialog: VehicleSteelWeighingSurveyDialogService
+
   ) {
     // this.vswsRecentList$ = this.backend.dataVS.getRecent();
 
@@ -27,15 +30,21 @@ export class VehicleSteelWeighingSurveyRecentComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  edit(vsws: VehicleSteelWeighingSurvey) {
-
-    const dialogRef = this.dialog.open(VehicleSteelWeighingSurveyDialogComponent, {
-      disableClose: true,
-      data: {vsws}
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+  onEdit(item: any) {
+    console.log('on edit');
+    this.vswsDialog.openDialog(item)
+      .pipe(
+        switchMap(dialogRef => {
+          return dialogRef.afterClosed();
+        })
+      )
+      .subscribe(result => {
+        console.log({editResult: result});
+        // if changed, reload recent
+      })
   }
+
+
+
 
 }

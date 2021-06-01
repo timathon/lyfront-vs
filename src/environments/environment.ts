@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  authUrl: '',
+  // authUrl: 'https://1586863340063318.cn-zhangjiakou.fc.aliyuncs.com/2016-08-15/proxy/ly/ly-auth/',
+  backendUrl: 'https://47.104.155.50:3003'
 };
 
 /*

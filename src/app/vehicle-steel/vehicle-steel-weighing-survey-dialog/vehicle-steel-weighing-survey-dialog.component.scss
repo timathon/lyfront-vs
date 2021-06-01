@@ -1,0 +1,11 @@
+.width-fifty {
+  width: 50%;
+  min-width: 50vw;
+}
+
+@media only screen and (min-width: 768px) {
+  .width-ten-vm {
+    max-width: 10%;
+    // min-width: 20vw;
+  }
+}

@@ -17,6 +17,10 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDividerModule } from '@angular/material/divider'
+import { LoadingComponent } from './components/loading/loading.component';
+import { AlertComponent } from './services/alert/alert.component';
+import { MatSelectModule } from '@angular/material/select';
 
 const materialModules = [
   MatToolbarModule,
@@ -30,7 +34,9 @@ const materialModules = [
   MatTableModule,
   MatTooltipModule,
   MatInputModule,
-  MatAutocompleteModule
+  MatAutocompleteModule,
+  MatDividerModule,
+  MatSelectModule
 ];
 
 
@@ -38,7 +44,9 @@ const materialModules = [
   declarations: [
     NotFoundComponent,
     LoginComponent,
-    DashboardComponent
+    DashboardComponent,
+    LoadingComponent,
+    AlertComponent,
   ],
   imports: [
     CommonModule,

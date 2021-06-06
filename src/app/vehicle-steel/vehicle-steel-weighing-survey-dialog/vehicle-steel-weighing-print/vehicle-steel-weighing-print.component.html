@@ -1,0 +1,71 @@
+<form [formGroup]="paddingForm" class="noprint">
+  <mat-form-field style="width: 5em">
+    <mat-label>
+      上部缩进
+    </mat-label>
+    <input type="number" matInput formControlName="top">
+  </mat-form-field>
+  <!-- <span>&nbsp;</span>
+  <mat-form-field style="width: 5em">
+    <mat-label>
+      下部缩进
+    </mat-label>
+    <input type="number" matInput formControlName="bottom">
+  </mat-form-field> -->
+  <span>&nbsp;</span>
+  <mat-form-field style="width: 5em">
+    <mat-label>
+      左侧缩进
+    </mat-label>
+    <input type="number" matInput formControlName="left">
+  </mat-form-field>
+  <span>&nbsp;</span>
+  <mat-form-field style="width: 5em">
+    <mat-label>
+      右侧缩进
+    </mat-label>
+    <input type="number" matInput formControlName="right">
+  </mat-form-field>
+  <button mat-button (click)="closeDialog()" style="float: right">
+    <mat-icon >close</mat-icon>
+  </button>
+
+</form>
+
+<div class="t3" [ngStyle]="{'padding': padding}">
+  <div class="header">辽宁隆运环保科技股份有限公司 - 过磅单</div>
+  <div class="meta meta1">序号：{{data.vsws.weighing?.inWeighedAt | date: 'yMMddHHmm'}}</div>
+  <div class="meta meta2"></div>
+  <div class="meta meta3">单位：公斤</div>
+
+  <div class="item title">车号</div>
+  <div class="item content">{{data.vsws.weighing.truckPlateNo}}</div>
+  <div class="item title">物资</div>
+  <div class="item content">车辆废钢</div>
+  <div class="item title">客户</div>
+  <div class="item lastcolumn content">{{data.vsws.weighing.customerName}}</div>
+
+  <div class="item title">毛重</div>
+  <div class="item content">{{data.vsws.weighing.inWeightKG | number}}</div>
+  <div class="item title">司磅员</div>
+  <div class="item content">超级权限</div>
+  <div class="item title">日期</div>
+  <div class="item lastcolumn content">{{data.vsws.weighing?.inWeighedAt | date: 'y-MM-dd HH:mm'}}</div>
+
+  <div class="item title">皮重</div>
+  <div class="item content">{{data.vsws.weighing.outWeightKG | number}}</div>
+  <div class="item title">司磅员</div>
+  <div class="item content">超级权限</div>
+  <div class="item title">日期</div>
+  <div class="item lastcolumn content">{{data.vsws.weighing?.outWeighedAt | date: 'y-MM-dd HH:mm'}}</div>
+
+  <div class="item lastrow title netweightat">净重</div>
+  <div class="item lastrow content netweightac">{{data.vsws.weighing.inWeightKG - data.vsws.weighing.outWeightKG |
+    number}}</div>
+  <div class="item lastrow title netweightbt">净重大写</div>
+  <div class="item lastrow lastcolumn content netweightbc">
+    {{utils.toChineseNumber(data.vsws.weighing.inWeightKG - data.vsws.weighing.outWeightKG)}}
+  </div>
+
+
+</div>

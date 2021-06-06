@@ -9,6 +9,7 @@ import { VehicleSteelWeighingSurveyRecentComponent } from './vehicle-steel-weigh
 import { VehicleSteelWeighingSurveyDialogService } from './vehicle-steel-weighing-survey-dialog/vehicle-steel-weighing-survey-dialog.service';
 import { CustomersModule } from '@app/customers/customers.module';
 import { DecimalPipe } from '@angular/common';
+import { VehicleSteelWeighingPrintComponent } from './vehicle-steel-weighing-survey-dialog/vehicle-steel-weighing-print/vehicle-steel-weighing-print.component';
 
 
 
@@ -17,7 +18,8 @@ import { DecimalPipe } from '@angular/common';
     VehicleSteelHomeComponent,
     VehicleSteelWeighingSurveyComponent,
     VehicleSteelWeighingSurveyDialogComponent,
-    VehicleSteelWeighingSurveyRecentComponent
+    VehicleSteelWeighingSurveyRecentComponent,
+    VehicleSteelWeighingPrintComponent
   ],
   imports: [
     VehicleSteelRoutingModule,

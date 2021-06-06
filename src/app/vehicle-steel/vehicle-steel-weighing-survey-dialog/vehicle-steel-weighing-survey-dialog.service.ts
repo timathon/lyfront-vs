@@ -8,6 +8,7 @@ import { User } from '@app/shared/services/data/data-users';
 import { VehicleSteelWeighingSurvey } from '@app/shared/services/data/data-vehicle-steel';
 import { forkJoin, of, Subject } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
+import { VehicleSteelWeighingPrintComponent } from './vehicle-steel-weighing-print/vehicle-steel-weighing-print.component';
 import { VehicleSteelWeighingSurveyDialogComponent } from './vehicle-steel-weighing-survey-dialog.component';
 
 
@@ -20,7 +21,7 @@ export class VehicleSteelWeighingSurveyDialogService {
     private auth: AuthService
   ) { }
 
-  openDialog(vsws?: VehicleSteelWeighingSurvey) {
+  openDialog(vsws?: VehicleSteelWeighingSurvey, type?: string) {
     console.log('opening vswsDialog with data:');
     console.log(vsws);
     const prepareVSWS = (vsws?: VehicleSteelWeighingSurvey) => {
@@ -107,15 +108,35 @@ export class VehicleSteelWeighingSurveyDialogService {
       .pipe(
         first(),
         map(combo => {
-          const dialogRef = this.dialog.open(VehicleSteelWeighingSurveyDialogComponent, {
-            disableClose: true,
-            data: {
-              ...combo,
-              changesSaved$$: this.changesSaved$$
-            },
-            // width: '50vw'
-            backdropClass: 'full-width' // todo
-          });
+          let dialogRef;
+          switch (type) {
+            case 'printWeighing':
+              dialogRef = this.dialog.open(VehicleSteelWeighingPrintComponent, {
+                disableClose: false,
+                data: {
+                  ...combo,
+                  changesSaved$$: this.changesSaved$$
+                },
+                // width: '50vw'
+                // backdropClass: 'full-width' // todo
+                width: '100%',
+                height: '100%',
+                maxWidth: '100%'
+              });
+              break;
+            default:
+              dialogRef = this.dialog.open(VehicleSteelWeighingSurveyDialogComponent, {
+                disableClose: true,
+                data: {
+                  ...combo,
+                  changesSaved$$: this.changesSaved$$
+                },
+                // width: '50vw'
+                // backdropClass: 'full-width' // todo
+                width: '100%',
+                maxWidth: '100%'
+              });
+          }
           return dialogRef;
         })
       )

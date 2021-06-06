@@ -15,7 +15,7 @@ export class VehicleSteelWeighingSurveyRecentComponent implements OnInit {
   @Input() vswsRecentList: VehicleSteelWeighingSurvey[] = [];
   // vswsRecentList$: Observable<VehicleSteelWeighingSurvey[]>
   displayedColumns: string[] = [
-    '_id', 'truckPlateNo', 'netWeight', 'surveyDone', 'edit'
+    '_id', 'truckPlateNo', 'netWeight', 'surveyDone', 'operations', /* 'print' */
   ];
   constructor(
     // private backend: DataService,
@@ -25,7 +25,7 @@ export class VehicleSteelWeighingSurveyRecentComponent implements OnInit {
   ) {
     // this.vswsRecentList$ = this.backend.dataVS.getRecent();
 
-   }
+  }
 
   ngOnInit(): void {
   }
@@ -39,12 +39,32 @@ export class VehicleSteelWeighingSurveyRecentComponent implements OnInit {
         })
       )
       .subscribe(result => {
-        console.log({editResult: result});
+        console.log({ editResult: result });
         // if changed, reload recent
       })
   }
 
 
+
+  onPrint(item: VehicleSteelWeighingSurvey) {
+    console.log('on printWeighing');
+    this.vswsDialog.openDialog(item, 'printWeighing')
+      .pipe(
+        switchMap(dialogRef => {
+          return dialogRef.afterClosed();
+        })
+      )
+      .subscribe(result => {
+        console.log({ editResult: result });
+        // if changed, reload recent
+      })
+  }
+
+  getNetWeight(item: VehicleSteelWeighingSurvey) {
+      return (!!(item.weighing?.inWeightKG * 1) && !!(item.weighing?.outWeightKG * 1)) ?
+      (item.weighing?.inWeightKG - item.weighing?.outWeightKG) :
+      0;
+  }
 
 
 }

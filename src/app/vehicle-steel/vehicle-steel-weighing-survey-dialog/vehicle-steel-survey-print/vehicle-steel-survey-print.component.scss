@@ -1,0 +1,103 @@
+.t3 {
+  display: grid;
+  grid-template-areas: 
+    "h1 h1 h1 h1 h1"
+    "h2 h2 h2 h2 h2"
+    "m11 m12 m13 m14 m15"
+    "m11 m12 m13 m14 m15"
+    "m11 m12 m13 m14 m15"
+    "m11 m12 m13 m14 m15"
+    "C1 C2 C3 C4 C5"
+    "C1 C2 C3 C4 C5"
+    "C1 C2 C3 C4 C5"
+    "C1 C2 C3 C4 C5"
+    "C1 C2 C3 C4 C5"
+    "C1 C2 C3 C4 C5"
+    "C1 C2 C3 C4 C5"
+    "F1 F2 F3 F4 F5"
+    /* "m1 m1 m2 m2 m2 m3"
+    "T1 C1 T2 C2 T3 C3"
+    "T1 C1 T2 C2 T3 C3"
+    "T1 C1 T2 C2 T3 C3"
+    "nwat nwac nwbt nwbc nwbc nwbc" */;
+  grid-template-columns: 2fr 7fr 3fr 3fr 3fr;
+}
+
+.meta11 {
+  text-align: right;
+}
+
+.meta14 {
+  text-align: right;
+}
+
+.footer1 {
+  text-align: right;
+}
+.footer22 {
+  float: right;
+}
+.footer4 {
+  text-align: right;
+}
+
+
+.title {
+  font-style: italic;
+}
+
+.content {
+  font-size: 1.1em;
+}
+
+.meta1 {
+  grid-area: m1;
+}
+.meta2 {
+  grid-area: m2;
+}
+.meta3 {
+  grid-area: m3;
+}
+.netweightbc {
+  grid-area: nwbc;
+}
+
+.item {
+  border-top: 1px black solid;
+  border-left: 1px black solid;
+  text-align: center;
+}
+
+.lastrow {
+  border-bottom: 1px black solid;
+}
+.lastcolumn {
+  border-right: 1px black solid;
+}
+
+.header {
+  grid-area: h1;
+  font-size: 1.3em;
+  text-align: center;
+  margin-bottom: 0.3em;
+}
+
+.header2 {
+  grid-area: h2;
+  font-size: 1.5em;
+  text-align: center;
+  margin-bottom: 0.3em;
+}
+
+.meta {
+  margin-bottom: 0.3em;
+}
+
+.meta3 {
+  text-align: right;
+}
+
+.text-right {
+  text-align: right;
+}

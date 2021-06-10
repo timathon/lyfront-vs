@@ -17,4 +17,27 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   .noprint{
       display:none;
   }
+  // body > * {
+  //   display: none;
+  // }
+  // body > #dataToPrint{
+  //   display: block;
+  // }
+
+  * {
+    visibility: hidden;
+    height: 0;
+    margin:0; padding:0;
+   }
+
+   #dataToPrint * {
+     visibility: visible;
+     height: auto;
+   }
 }
+
+// @media print{
+//   table th,table td{
+//     width:200pt;
+//   }
+// }

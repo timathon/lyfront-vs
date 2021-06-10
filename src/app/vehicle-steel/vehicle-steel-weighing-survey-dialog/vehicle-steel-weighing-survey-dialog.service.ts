@@ -6,8 +6,9 @@ import { DataService } from '@app/shared/services/data.service';
 import { Customer } from '@app/shared/services/data/data-customers';
 import { User } from '@app/shared/services/data/data-users';
 import { VehicleSteelWeighingSurvey } from '@app/shared/services/data/data-vehicle-steel';
-import { forkJoin, of, Subject } from 'rxjs';
+import { forkJoin, of, Subject, zip } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
+import { VehicleSteelSurveyPrintComponent } from './vehicle-steel-survey-print/vehicle-steel-survey-print.component';
 import { VehicleSteelWeighingPrintComponent } from './vehicle-steel-weighing-print/vehicle-steel-weighing-print.component';
 import { VehicleSteelWeighingSurveyDialogComponent } from './vehicle-steel-weighing-survey-dialog.component';
 
@@ -36,6 +37,8 @@ export class VehicleSteelWeighingSurveyDialogService {
         const loadingDialogRef = this.dialog.open(LoadingComponent, {
           disableClose: true
         });
+
+
         const getDetails = forkJoin({
           customer: vsws.weighing.customerId ? this.backend.dataCustomers.search({ _id: vsws.weighing.customerId }).pipe(
             map((customers: Customer[]) => {
@@ -101,9 +104,24 @@ export class VehicleSteelWeighingSurveyDialogService {
         // return of(vsws);
       }
     }
+    const getPrices = (!!vsws && type === 'printSurvey') ?
+      (() => {
+        const pwIds = vsws.survey.materials.map(item => item.pwId);
+        const gets = pwIds.map(pwId => this.backend.dataPrices.getPrices3({
+          pwId, spec: '.'
+        }).pipe(
+          map((results: any) => {
+            return results[0];
+          })
+        ));
+        return zip(...gets);
+      })()
+      : of(null);
+
     return forkJoin({
       vsws: prepareVSWS(vsws),
-      pws: this.backend.dataPws.getPws()
+      pws: this.backend.dataPws.getPws(),
+      prices: getPrices
     })
       .pipe(
         first(),
@@ -112,6 +130,20 @@ export class VehicleSteelWeighingSurveyDialogService {
           switch (type) {
             case 'printWeighing':
               dialogRef = this.dialog.open(VehicleSteelWeighingPrintComponent, {
+                disableClose: false,
+                data: {
+                  ...combo,
+                  changesSaved$$: this.changesSaved$$
+                },
+                // width: '50vw'
+                // backdropClass: 'full-width' // todo
+                width: '100%',
+                height: '100%',
+                maxWidth: '100%'
+              });
+              break;
+            case 'printSurvey':
+              dialogRef = this.dialog.open(VehicleSteelSurveyPrintComponent, {
                 disableClose: false,
                 data: {
                   ...combo,

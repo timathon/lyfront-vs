@@ -8,6 +8,7 @@ import { CalculatePatchesService } from './calculate-patches.service';
 import { DataPws } from './data/data-pws';
 import { forkJoin, of } from 'rxjs';
 import { first, switchMap, tap } from 'rxjs/operators';
+import { DataPrices } from './data/data-prices';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class DataService {
   dataCustomers: DataCustomers;
   dataUsers: DataUsers;
   dataPws: DataPws;
+  dataPrices: DataPrices;
   cache: {[key: string]: any} = {};
   constructor(
     private http: HttpClient,
@@ -28,6 +30,7 @@ export class DataService {
     this.dataCustomers = new DataCustomers(this.http, this.setHeaders, this.appConfig, this.calculatePatches);
     this.dataUsers = new DataUsers(this.http, this.setHeaders, this.appConfig, this.calculatePatches);
     this.dataPws = new DataPws(this.http, this.setHeaders, this.appConfig, this.calculatePatches);
+    this.dataPrices = new DataPrices(this.http, this.setHeaders, this.appConfig, this.calculatePatches);
     this.cacheInit();
   }
 

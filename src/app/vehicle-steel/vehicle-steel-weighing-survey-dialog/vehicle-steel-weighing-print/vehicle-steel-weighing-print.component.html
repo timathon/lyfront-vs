@@ -26,13 +26,17 @@
     </mat-label>
     <input type="number" matInput formControlName="right">
   </mat-form-field>
+  <span>&nbsp;</span>
+  <button mat-button (click)="onBtnPrintClick()">
+    <mat-icon>print</mat-icon>
+  </button>
   <button mat-button (click)="closeDialog()" style="float: right">
-    <mat-icon >close</mat-icon>
+    <mat-icon>close</mat-icon>
   </button>
 
 </form>
 
-<div class="t3" [ngStyle]="{'padding': padding}">
+<div class="t3" id="dataToPrint" [ngStyle]="{'padding': padding}">
   <div class="header">辽宁隆运环保科技股份有限公司 - 过磅单</div>
   <div class="meta meta1">序号：{{data.vsws.weighing?.inWeighedAt | date: 'yMMddHHmm'}}</div>
   <div class="meta meta2"></div>

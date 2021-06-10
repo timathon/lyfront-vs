@@ -47,6 +47,9 @@ export class VehicleSteelWeighingSurveyComponent implements OnInit {
         return this.backend.dataVS.getRecent()
       }),
       switchMap((vswsRecentList) => {
+        vswsRecentList = vswsRecentList.sort((a, b) => {
+          return Date.parse(b.createdAt) - Date.parse(a.createdAt);
+        });
         return this.filterSurveyDone$$
           .pipe(
             map((showOnlySurveyNotDone) => {

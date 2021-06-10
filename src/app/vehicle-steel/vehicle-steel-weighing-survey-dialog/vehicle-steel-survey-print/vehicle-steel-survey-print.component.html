@@ -1,0 +1,107 @@
+<form [formGroup]="paddingForm" class="noprint">
+  <mat-form-field style="width: 5em">
+    <mat-label>
+      上部缩进
+    </mat-label>
+    <input type="number" matInput formControlName="top">
+  </mat-form-field>
+  <!-- <span>&nbsp;</span>
+  <mat-form-field style="width: 5em">
+    <mat-label>
+      下部缩进
+    </mat-label>
+    <input type="number" matInput formControlName="bottom">
+  </mat-form-field> -->
+  <span>&nbsp;</span>
+  <mat-form-field style="width: 5em">
+    <mat-label>
+      左侧缩进
+    </mat-label>
+    <input type="number" matInput formControlName="left">
+  </mat-form-field>
+  <span>&nbsp;</span>
+  <mat-form-field style="width: 5em">
+    <mat-label>
+      右侧缩进
+    </mat-label>
+    <input type="number" matInput formControlName="right">
+  </mat-form-field>
+  <span>&nbsp;</span>
+  <button mat-button (click)="onBtnPrintClick()">
+    <mat-icon>print</mat-icon>
+  </button>
+  <button mat-button (click)="closeDialog()" style="float: right">
+    <mat-icon>close</mat-icon>
+  </button>
+
+
+</form>
+
+<div class="t3" id="dataToPrint" [ngStyle]="{'padding': padding}">
+  <div class="header">辽宁隆运环保科技股份有限公司</div>
+  <div class="header2">入库结算单</div>
+  <!-- <div class="meta meta1">序号：{{data.vsws.weighing?.inWeighedAt | date: 'yMMddHHmm'}}</div>
+  <div class="meta meta2"></div>
+  <div class="meta meta3">单位：公斤</div> -->
+
+  <div class="meta11">结算单位：</div>
+  <div class="meta12">{{data.vsws.weighing.customerName}}</div>
+  <div class="meta13"></div>
+  <div class="meta14">结算单号：</div>
+  <div class="meta15">{{data.vsws.weighing?.inWeighedAt | date: 'yMMddHHmm'}}</div>
+
+  <div class="meta11">发票单位：</div>
+  <div class="meta12">{{data.vsws.weighing.customerName}}</div>
+  <div class="meta13"></div>
+  <div class="meta14">车号：</div>
+  <div class="meta15">{{data.vsws.weighing.truckPlateNo}}</div>
+
+  <div class="meta11">价格表：</div>
+  <div class="meta12">采购</div>
+  <div class="meta13"></div>
+  <div class="meta14">代垫运费：</div>
+  <div class="meta15">0</div>
+
+  <div class="meta11">税点：</div>
+  <div class="meta12">0</div>
+  <div class="meta13"></div>
+  <div class="meta14">备注：</div>
+  <div class="meta15">含税价，税点13</div>
+
+  <div class="item content1">产品代码</div>
+  <div class="item content2">产品名称</div>
+  <div class="item content3">结算数量</div>
+  <div class="item content4">结算价格</div>
+  <div class="item lastcolumn content5">结算金额</div>
+
+  <ng-container *ngFor="let material of materialsArr">
+    <div class="item content1">{{material ? getPwCode(material) : ''}}<span>&nbsp;</span></div>
+    <div class="item content2">{{material ? getPwName(material) : ''}}</div>
+    <div class="item content3">{{material ? (getWeightTon(material) | number: '1.2-2' )+ ' 吨' : ''}}</div>
+    <div class="item content4">{{(material && material.pwId !== valueLessPwId) ? (getDefaultPrice(material, data.prices) | number: '1.2-2') + ' 元' : ''}}
+    </div>
+    <div class="item lastcolumn content5"></div>
+  </ng-container>
+
+
+
+
+  <div class="item lastrow content1"></div>
+  <div class="item lastrow content2 text-right">合计：</div>
+  <div class="item lastrow content3">{{getTotalWeightTon(data.vsws.survey.materials) | number: '1.2-2'}} 吨</div>
+  <div class="item lastrow content4">{{getAveragePrice(data.vsws.survey.materials) | number: '1.2-2'}} 元</div>
+  <div class="item lastrow lastcolumn content5">{{getTotalAmount(data.vsws.survey.materials) | number: '1.2-2'}} 元</div>
+
+  <div class="footer1">打印日期：</div>
+  <div class="footer2">
+    <span>{{todayDate | date: 'y-MM-dd'}}</span>
+    <span class="footer22">结算人员：</span>
+  </div>
+  <div class="footer3">{{userName}}</div>
+  <div class="footer4">负责人：</div>
+  <div class="footer5"></div>
+
+
+
+
+</div>

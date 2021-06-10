@@ -20,14 +20,14 @@ export class VehicleSteelWeighingPrintComponent implements OnInit, OnDestroy {
     public utils: UtilsService,
     private dialogRef: MatDialogRef<VehicleSteelWeighingPrintComponent>,
 
-    ) { 
-      const paddingCache = localStorage.getItem('paddingCache') ? 
-        JSON.parse(localStorage.getItem('paddingCache') as string) :
-        {
-          top: 0, bottom: 0, left: 0, right: 0
-        };
-      this.paddingForm = this.fb.group(paddingCache);
-    }
+  ) {
+    const paddingCache = localStorage.getItem('paddingCache') ?
+      JSON.parse(localStorage.getItem('paddingCache') as string) :
+      {
+        top: 0, bottom: 0, left: 0, right: 0
+      };
+    this.paddingForm = this.fb.group(paddingCache);
+  }
 
   ngOnInit(): void {
     console.log(this.data);
@@ -42,6 +42,10 @@ export class VehicleSteelWeighingPrintComponent implements OnInit, OnDestroy {
 
   closeDialog() {
     this.dialogRef.close();
+  }
+
+  onBtnPrintClick() {
+    window.print();
   }
 
   get padding() {

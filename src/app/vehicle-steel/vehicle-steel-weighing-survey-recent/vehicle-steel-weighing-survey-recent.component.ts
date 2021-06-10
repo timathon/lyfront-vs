@@ -66,5 +66,20 @@ export class VehicleSteelWeighingSurveyRecentComponent implements OnInit {
       0;
   }
 
+  onPrintB(item: VehicleSteelWeighingSurvey) {
+    // printing inventory entry receipt
+    console.log('on printSurvey');
+    this.vswsDialog.openDialog(item, 'printSurvey')
+      .pipe(
+        switchMap(dialogRef => {
+          return dialogRef.afterClosed();
+        })
+      )
+      .subscribe(result => {
+        console.log({ editResult: result });
+        // if changed, reload recent
+      })
+  }
+
 
 }

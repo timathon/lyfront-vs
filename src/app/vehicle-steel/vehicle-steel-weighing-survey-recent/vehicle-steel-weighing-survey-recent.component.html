@@ -34,6 +34,12 @@
       >
         <mat-icon>print</mat-icon>
       </button>
+      <span>&nbsp;</span>
+      <button mat-button color="primary" (click)="onPrintB(element)"
+        [disabled]="!element.survey.surveyedAt"
+      >
+        <mat-icon>room_preferences</mat-icon>
+      </button>
     </td>
   </ng-container>
 

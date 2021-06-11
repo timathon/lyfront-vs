@@ -31,13 +31,18 @@
           <mat-label>
             客户名称
           </mat-label>
-          <input matInput formControlName="customerName"
-            [matAutocompleteDisabled]="!!this.data.vsws.weighing.customerId" [matAutocomplete]="autoCustomerName">
-          <mat-autocomplete #autoCustomerName="matAutocomplete">
-            <mat-option *ngFor="let customerOption of possibleCustomers$ | async" [value]="customerOption.name">
-              {{customerOption.name}}
-            </mat-option>
-          </mat-autocomplete>
+          <ng-container *ngIf="!this.data.vsws.weighing.customerId">
+            <input matInput formControlName="customerName"
+              [matAutocompleteDisabled]="!!this.data.vsws.weighing.customerId" [matAutocomplete]="autoCustomerName">
+            <mat-autocomplete #autoCustomerName="matAutocomplete">
+              <mat-option *ngFor="let customerOption of possibleCustomers$ | async" [value]="customerOption.name">
+                {{customerOption.name}}
+              </mat-option>
+            </mat-autocomplete>
+          </ng-container>
+          <ng-container *ngIf="!!this.data.vsws.weighing.customerId">            
+            <input matInput formControlName="customerName">
+          </ng-container>
         </mat-form-field>
         <span>&nbsp;</span>
         <mat-form-field>
@@ -102,8 +107,11 @@
         <button mat-button color="warn" *ngIf="vswsForm.errors">
           {{vswsForm.errors?.weightError ? '皮重不能大于毛重' : ''}}
         </button>
-        <button mat-button color="warn" *ngIf="vswsForm.errors">
+        <!-- <button mat-button color="warn" *ngIf="vswsForm.errors">
           {{vswsForm.errors?.weightError2 ? '物资总重不能大于过磅净重' : ''}}
+        </button> -->
+        <button mat-button color="warn" *ngIf="totalMaterialWeightGreaterThanWeighingNetweight">
+          注意：物资总重已大于过磅净重
         </button>
         <br>
         <mat-form-field class="width-fifty">
@@ -233,7 +241,7 @@
 <mat-dialog-actions align="end">
   <button mat-button color="primary" (click)="onCancel()">取消</button>
   <button mat-raised-button color="primary" (click)="onSubmit()"
-    [disabled]="vswsForm.invalid || materialsFormArray.invalid">保存</button>
+    [disabled]="vswsForm.invalid">保存</button>
 </mat-dialog-actions>
 
-<input style="display: none" [value]="status.observables.valueChanges | async">
+<!-- <input style="display: none" [value]="status.observables.valueChanges | async"> -->

@@ -94,7 +94,9 @@ export class DataVehicleSteel {
     // 2) inWeighed 7 days earlier and survey not done
 
     const dateX = new Date();
-    dateX.setDate(dateX.getDate() - 6);
+    // recent 7 days
+    // use recent 30 days
+    dateX.setDate(dateX.getDate() - 29);
     const dateBeginningX = new Date(dateX.toISOString().substr(0, 10));
     dateBeginningX.setHours(0); // 00hours of +8000
     const query1 = { createdAt: { $gte: new Date(dateBeginningX) } };

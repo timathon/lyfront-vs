@@ -6,7 +6,7 @@
     "m11 m12 m13 m14 m15"
     "m11 m12 m13 m14 m15"
     "m11 m12 m13 m14 m15"
-    "m11 m12 m13 m14 m15"
+    // "m11 m12 m13 m14 m15"
     "C1 C2 C3 C4 C5"
     "C1 C2 C3 C4 C5"
     "C1 C2 C3 C4 C5"
@@ -21,6 +21,11 @@
     "T1 C1 T2 C2 T3 C3"
     "nwat nwac nwbt nwbc nwbc nwbc" */;
   grid-template-columns: 2fr 7fr 3fr 3fr 3fr;
+}
+
+.item.number {
+  text-align: right;
+  padding-right: 1em;
 }
 
 .meta11 {

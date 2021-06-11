@@ -62,35 +62,36 @@
   <div class="meta14">代垫运费：</div>
   <div class="meta15">0</div>
 
-  <div class="meta11">税点：</div>
+  <!-- <div class="meta11">税点：</div>
   <div class="meta12">0</div>
   <div class="meta13"></div>
   <div class="meta14">备注：</div>
-  <div class="meta15">含税价，税点13</div>
+  <div class="meta15">含税价，税点13</div> -->
 
   <div class="item content1">产品代码</div>
   <div class="item content2">产品名称</div>
-  <div class="item content3">结算数量</div>
-  <div class="item content4">结算价格</div>
-  <div class="item lastcolumn content5">结算金额</div>
+  <div class="item content3">结算数量(吨)</div>
+  <div class="item content4">结算价格(元/吨)</div>
+  <div class="item lastcolumn content5">结算金额(元)</div>
 
   <ng-container *ngFor="let material of materialsArr">
     <div class="item content1">{{material ? getPwCode(material) : ''}}<span>&nbsp;</span></div>
     <div class="item content2">{{material ? getPwName(material) : ''}}</div>
-    <div class="item content3">{{material ? (getWeightTon(material) | number: '1.2-2' )+ ' 吨' : ''}}</div>
-    <div class="item content4">{{(material && material.pwId !== valueLessPwId) ? (getDefaultPrice(material, data.prices) | number: '1.2-2') + ' 元' : ''}}
-    </div>
-    <div class="item lastcolumn content5"></div>
+    <div class="item content3 number">{{material ? (getWeightTon(material) | number: '1.2-2' ) : ''}}</div>
+    <!-- <div class="item content4">{{(material && material.pwId !== valueLessPwId) ? (getDefaultPrice(material, data.prices) | number: '1.2-2') + ' 元' : ''}}
+    </div> -->
+    <div class="item content4 number">{{material ? (getPrice(material)  | number: '1.2-2') : ''}}</div>
+    <div class="item lastcolumn content5 number">{{material ? (material.cost  | number: '1.2-2') : ''}}</div>
   </ng-container>
 
 
 
 
   <div class="item lastrow content1"></div>
-  <div class="item lastrow content2 text-right">合计：</div>
-  <div class="item lastrow content3">{{getTotalWeightTon(data.vsws.survey.materials) | number: '1.2-2'}} 吨</div>
-  <div class="item lastrow content4">{{getAveragePrice(data.vsws.survey.materials) | number: '1.2-2'}} 元</div>
-  <div class="item lastrow lastcolumn content5">{{getTotalAmount(data.vsws.survey.materials) | number: '1.2-2'}} 元</div>
+  <div class="item lastrow content2 text-right">合计（含税，税点13）：</div>
+  <div class="item lastrow content3 number">{{getTotalWeightTon(data.vsws.survey.materials) | number: '1.2-2'}}</div>
+  <div class="item lastrow content4 number">{{getAveragePrice(data.vsws.survey.materials) | number: '1.2-2'}}</div>
+  <div class="item lastrow lastcolumn content5 number">{{getTotalAmount(data.vsws.survey.materials) | number: '1.2-2'}}</div>
 
   <div class="footer1">打印日期：</div>
   <div class="footer2">

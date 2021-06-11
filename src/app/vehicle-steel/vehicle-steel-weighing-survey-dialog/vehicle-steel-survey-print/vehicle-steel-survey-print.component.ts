@@ -92,7 +92,7 @@ export class VehicleSteelSurveyPrintComponent implements OnInit {
         (curr.cost ? (curr.cost as number) + acc : acc) :
         acc;
     }, 0)
-    return totalAmount0 * 1.13;
+    return totalAmount0;
   }
 
   getAveragePrice(materials: SurveyedMaterial[]) {

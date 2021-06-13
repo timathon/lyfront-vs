@@ -80,8 +80,8 @@
     <div class="item content3 number">{{material ? (getWeightTon(material) | number: '1.2-2' ) : ''}}</div>
     <!-- <div class="item content4">{{(material && material.pwId !== valueLessPwId) ? (getDefaultPrice(material, data.prices) | number: '1.2-2') + ' 元' : ''}}
     </div> -->
-    <div class="item content4 number">{{material ? (getPrice(material)  | number: '1.2-2') : ''}}</div>
-    <div class="item lastcolumn content5 number">{{material ? (material.cost  | number: '1.2-2') : ''}}</div>
+    <div class="item content4 number">{{material ? (material.price * 1000  | number: '1.2-2') : ''}}</div>
+    <div class="item lastcolumn content5 number">{{material ? (getAmount(material)  | number: '1.2-2') : ''}}</div>
   </ng-container>
 
 
@@ -95,7 +95,7 @@
 
   <div class="footer1">打印日期：</div>
   <div class="footer2">
-    <span>{{todayDate | date: 'y-MM-dd'}}</span>
+    <span>{{todayDate | date: 'y-MM-dd HH:mm'}}</span>
     <span class="footer22">结算人员：</span>
   </div>
   <div class="footer3">{{userName}}</div>

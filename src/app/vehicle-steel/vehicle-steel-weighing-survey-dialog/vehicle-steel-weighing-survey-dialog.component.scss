@@ -3,9 +3,14 @@
   min-width: 50vw;
 }
 
+
 @media only screen and (min-width: 768px) {
   .width-ten-vm {
     max-width: 10%;
+    // min-width: 20vw;
+  }
+  .width-fifteen-vm {
+    max-width: 15%;
     // min-width: 20vw;
   }
 }

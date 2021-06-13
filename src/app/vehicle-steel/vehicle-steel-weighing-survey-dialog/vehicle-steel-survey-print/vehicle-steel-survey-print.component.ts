@@ -89,19 +89,18 @@ export class VehicleSteelSurveyPrintComponent implements OnInit {
   getTotalAmount(materials: SurveyedMaterial[]) {
     const totalAmount0 = materials.reduce((acc, curr) => {
       return curr.pwId !== this.valueLessPwId ?
-        (curr.cost ? (curr.cost as number) + acc : acc) :
+        (curr.price ? (curr.price as number) * (curr.weightKG as number) + acc : acc) :
         acc;
     }, 0)
-    return totalAmount0;
+    return totalAmount0 * 1.13;
   }
 
   getAveragePrice(materials: SurveyedMaterial[]) {
     return Math.round((this.getTotalAmount(materials) / this.getTotalWeightTon(materials) * 100)) / 100;
   }
 
-  getPrice(material: SurveyedMaterial) {
-    
-    return (Math.round(material.cost as number * 100) / 100) / this.getWeightTon(material);
+  getAmount(material: SurveyedMaterial) {
+    return (material.price || 0) * (material.weightKG || 0);
   }
 
   getDefaultPrice(material: SurveyedMaterial, prices: any[]) {

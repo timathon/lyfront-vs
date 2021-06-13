@@ -133,9 +133,9 @@
 
             <small>
               <button mat-button>【{{materialsFormArray.controls.length}}项】</button>
-              <button mat-button *ngIf="status.materialTotalWeight <= status.netWeightKG">【{{status.materialTotalWeight}}公斤】</button>
-              <button mat-button *ngIf="status.materialTotalWeight > status.netWeightKG" color="warn">【{{status.materialTotalWeight}}公斤】</button>
-              <button mat-button>【{{status.materialTotalCost}}元】</button>
+              <button mat-button *ngIf="status.materialTotalWeight <= status.netWeightKG">【{{status.materialTotalWeight | number:'1.0-0'}}公斤】</button>
+              <button mat-button *ngIf="status.materialTotalWeight > status.netWeightKG" color="warn">【{{status.materialTotalWeight | number:'1.0-0'}}公斤】</button>
+              <button mat-button>【{{status.materialTotalCost | number:'1.2-2'}}元】</button>
               </small>
           </small>
           <span>&nbsp;&nbsp;&nbsp;</span>
@@ -163,27 +163,39 @@
                 <mat-label>物资名称</mat-label>
                 <!-- <input matInput> -->
                 <!-- <input matInput [formControl]="getMaterialControl(i, 'pwsName')"> -->
-                <mat-select [formControl]="$any(material.get('pwId'))">
+                <mat-select [formControl]="$any(material.get('pwId'))" #select="matSelect">
                   <mat-option *ngFor="let pw of selectedPws" [value]="pw._id">
                     {{pw.name}}
                   </mat-option>
                 </mat-select>
                 <span matPrefix>{{i + 1}}&nbsp;&nbsp;</span>
               </mat-form-field>
+              <!-- {{$any(select.selected)?.viewValue}} -->
               <span>&nbsp;</span>
-              <mat-form-field class="width-ten-vm">
-                <mat-label>重量（公斤）</mat-label>
+              <mat-form-field class="width-fifteen-vm">
+                <mat-label>重量</mat-label>
                 <input matInput type="number" [formControl]="$any(material.get('weightKG'))">
+                <span matSuffix>公斤</span>
+
+              </mat-form-field>
+
+              <span>&nbsp;</span>
+              <mat-form-field class="width-fifteen-vm">
+                <mat-label>价格</mat-label>
+                <input matInput type="number" [formControl]="$any(material.get('price'))">
+                <span matSuffix>元/公斤</span>
               </mat-form-field>
               <span>&nbsp;</span>
-              <mat-form-field class="width-ten-vm">
+              <mat-form-field class="width-fifteen-vm">
+                <mat-label>金额</mat-label>
+                <input matInput type="number" disabled [value]="$any(material.get('weightKG')).value * $any(material.get('price')).value">
+                <span matSuffix>元</span>
+
+              </mat-form-field>
+              <span>&nbsp;</span>
+              <mat-form-field class="width-ten-vm" *ngIf="select.selected && $any(select.selected)?.viewValue.indexOf('发动机') > -1">
                 <mat-label>数量</mat-label>
                 <input matInput type="number" [formControl]="$any(material.get('count'))">
-              </mat-form-field>
-              <span>&nbsp;</span>
-              <mat-form-field class="width-ten-vm">
-                <mat-label>金额（元）</mat-label>
-                <input matInput type="number" [formControl]="$any(material.get('cost'))">
               </mat-form-field>
               <br>
               <mat-form-field class="width-fifty">

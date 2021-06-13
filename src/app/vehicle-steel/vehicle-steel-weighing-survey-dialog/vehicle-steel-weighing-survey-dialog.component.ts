@@ -99,7 +99,8 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit, OnDest
         pwId: [{ value: material.pwId, disabled: true }],
         weightKG: material.weightKG,
         count: material.count,
-        cost: material.cost,
+        price: material.price,
+        // cost: [{value: (material.count || 0) * (material.price || 0), disabled: true}],
         notes: material.notes,
         inventoryId: material.inventoryId,
       })));
@@ -187,31 +188,24 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit, OnDest
           });
           materialsFormValue.forEach((materialX, index) => {
             // check if pwName includes 发动机
-            const pwFound = this.selectedPws.find(pw => pw._id === materialX.pwId);
-            if (pwFound && pwFound.name.indexOf('发动机') > -1) {
-              // console.log(index, '发动机')
-              console.log({
-                pwFound,
-                countOp: 'enabling'
-              })
-              this.materialsFormArray.controls[index].get('count')?.enable({ emitEvent: false });
-            } else {
-              if (pwFound) {
-                console.log({
-                  pwFound,
-                  countOp: 'disabling'
-                })
-                this.materialsFormArray.controls[index].get('count')?.disable({ emitEvent: false });
-  
-              }
-            }
+            // const pwFound = this.selectedPws.find(pw => pw._id === materialX.pwId);
+            // if (pwFound && pwFound.name.indexOf('发动机') > -1) {
+            //   this.materialsFormArray.controls[index].get('count')?.enable({ emitEvent: false });
+            // } else {
+            //   if (pwFound) {
+            //     this.materialsFormArray.controls[index].get('count')?.disable({ emitEvent: false });
+            //   }
+            // }
+
+
+            
           })
 
 
 
           setTimeout(() => {
             this.status.materialTotalCost = materialsFormValue.reduce((acc, curr) => {
-              return acc + curr.cost * 1
+              return acc + curr.price * curr.weightKG
             }, 0);
             this.status.materialTotalWeight = materialsFormValue.reduce((acc, curr) => {
               // console.log(curr.weightKG * 1)
@@ -339,7 +333,8 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit, OnDest
         pwId: ['', Validators.required],
         weightKG: [0, Validators.min(0.1)],
         count: [{ value: 0, disabled: true }],
-        cost: 0,
+        price: 0,
+        // cost: 0,
         notes: ''
       });
       this.materialsFormArray.push(newFormItem);
@@ -509,6 +504,13 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit, OnDest
         })
     }
 
+  }
+
+  objectKeys(obj: {[key: string]: any}) {
+    console.log({obj});
+    // console.log({
+    //   keys: Object.keys(obj)
+    // });
   }
 
 

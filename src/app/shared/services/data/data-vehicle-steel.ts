@@ -31,6 +31,7 @@ export class SurveyedMaterial {
   weightKG?: number;
   count?: number;
   cost?: number;
+  price?: number;
   notes?: string;
   inventoryId?: any;
   createdAt?: Date;

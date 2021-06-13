@@ -17,12 +17,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   .noprint{
       display:none;
   }
-  // body > * {
-  //   display: none;
-  // }
-  // body > #dataToPrint{
-  //   display: block;
-  // }
+
 
   * {
     visibility: hidden;
@@ -36,8 +31,3 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
    }
 }
 
-// @media print{
-//   table th,table td{
-//     width:200pt;
-//   }
-// }

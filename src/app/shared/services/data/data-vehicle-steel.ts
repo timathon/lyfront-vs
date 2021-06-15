@@ -54,6 +54,7 @@ export class VehicleSteelWeighingSurvey {
   deletedAt?: any = null;
   deletedBy?: any = null;
   deletedNotes?: any = null;
+  taxRatio?: number;
   weighing: VehicleSteelWeighing = {
     truckPlateNo: '',
     customerId: '',

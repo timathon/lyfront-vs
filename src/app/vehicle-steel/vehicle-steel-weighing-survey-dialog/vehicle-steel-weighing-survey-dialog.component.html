@@ -40,7 +40,7 @@
               </mat-option>
             </mat-autocomplete>
           </ng-container>
-          <ng-container *ngIf="!!this.data.vsws.weighing.customerId">            
+          <ng-container *ngIf="!!this.data.vsws.weighing.customerId">
             <input matInput formControlName="customerName">
           </ng-container>
         </mat-form-field>
@@ -133,13 +133,21 @@
 
             <small>
               <button mat-button>【{{materialsFormArray.controls.length}}项】</button>
-              <button mat-button *ngIf="status.materialTotalWeight <= status.netWeightKG">【{{status.materialTotalWeight | number:'1.0-0'}}公斤】</button>
-              <button mat-button *ngIf="status.materialTotalWeight > status.netWeightKG" color="warn">【{{status.materialTotalWeight | number:'1.0-0'}}公斤】</button>
+              <button mat-button *ngIf="status.materialTotalWeight <= status.netWeightKG">【{{status.materialTotalWeight
+                | number:'1.0-0'}}公斤】</button>
+              <button mat-button *ngIf="status.materialTotalWeight > status.netWeightKG"
+                color="warn">【{{status.materialTotalWeight | number:'1.0-0'}}公斤】</button>
               <button mat-button>【{{status.materialTotalCost | number:'1.2-2'}}元】</button>
-              </small>
+            </small>
           </small>
           <span>&nbsp;&nbsp;&nbsp;</span>
-          <button mat-button color="primary" (click)="addMaterial()" [disabled]="
+          <mat-form-field class="width-five-vm" style="font-size: 14px">
+            <mat-label>税点</mat-label>
+            <input matInput type="number" [formControl]="$any(vswsForm.get('taxRatio'))">
+            <span matSuffix>%</span>
+          </mat-form-field>
+          <span>&nbsp;&nbsp;&nbsp;</span>
+          <button mat-raised-button color="primary" (click)="addMaterial()" [disabled]="
           !$any(vswsForm.get('weighing.inWeightKG')).value || !$any(vswsForm.get('weighing.outWeightKG')).value ||
           ($any(vswsForm.get('weighing.inWeightKG')).value - $any(vswsForm.get('weighing.outWeightKG')).value <= 0)
           ">添加物资</button>
@@ -188,12 +196,14 @@
               <span>&nbsp;</span>
               <mat-form-field class="width-fifteen-vm">
                 <mat-label>金额</mat-label>
-                <input matInput type="number" disabled [value]="$any(material.get('weightKG')).value * $any(material.get('price')).value">
+                <input matInput type="number" disabled
+                  [value]="$any(material.get('weightKG')).value * $any(material.get('price')).value">
                 <span matSuffix>元</span>
 
               </mat-form-field>
               <span>&nbsp;</span>
-              <mat-form-field class="width-ten-vm" *ngIf="select.selected && $any(select.selected)?.viewValue.indexOf('发动机') > -1">
+              <mat-form-field class="width-ten-vm"
+                *ngIf="select.selected && $any(select.selected)?.viewValue.indexOf('发动机') > -1">
                 <mat-label>数量</mat-label>
                 <input matInput type="number" [formControl]="$any(material.get('count'))">
               </mat-form-field>
@@ -252,8 +262,7 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button color="primary" (click)="onCancel()">取消</button>
-  <button mat-raised-button color="primary" (click)="onSubmit()"
-    [disabled]="vswsForm.invalid">保存</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="vswsForm.invalid">保存</button>
 </mat-dialog-actions>
 
 <!-- <input style="display: none" [value]="status.observables.valueChanges | async"> -->

@@ -54,6 +54,7 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit, OnDest
     _id: true,
     isDeleted: true,
     deletedAt: true,
+    taxRatio: true,
     weighing: {
       truckPlateNo: true,
       customerId: true,
@@ -113,6 +114,7 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit, OnDest
       deletedAt: this.data.vsws.deletedAt,
       deletedBy: this.data.vsws.deletedBy,
       deletedNotes: this.data.vsws.deletedNotes,
+      taxRatio: this.data.vsws.taxRatio,
       weighing: this.fb.group({
         truckPlateNo: [{
           value: this.data.vsws.weighing.truckPlateNo, disabled: !!this.data.vsws.weighing.truckPlateNo

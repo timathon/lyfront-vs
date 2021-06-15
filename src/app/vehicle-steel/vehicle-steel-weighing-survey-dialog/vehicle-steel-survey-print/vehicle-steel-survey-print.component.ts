@@ -1,5 +1,5 @@
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthService } from '@app/shared/services/auth.service';
 import { SurveyedMaterial, VehicleSteelWeighingSurvey } from '@app/shared/services/data/data-vehicle-steel';
@@ -20,6 +20,7 @@ export class VehicleSteelSurveyPrintComponent implements OnInit {
   todayDate = new Date();
   userName: any;
   valueLessPwId = '60b046d142632c04fb202b57';
+  taxRatioCtrl = new FormControl();
 
   constructor(
     private auth: AuthService,
@@ -92,7 +93,7 @@ export class VehicleSteelSurveyPrintComponent implements OnInit {
         (curr.price ? (curr.price as number) * (curr.weightKG as number) + acc : acc) :
         acc;
     }, 0)
-    return totalAmount0 * 1.13;
+    return totalAmount0 * (1 + (this.data.vsws.taxRatio ? this.data.vsws.taxRatio * 0.01 : 0));
   }
 
   getAveragePrice(materials: SurveyedMaterial[]) {

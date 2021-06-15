@@ -88,7 +88,7 @@
 
 
   <div class="item lastrow content1"></div>
-  <div class="item lastrow content2 text-right">合计（含税，税点13）：</div>
+  <div class="item lastrow content2 text-right">{{'合计（含税，税点' + data.vsws.taxRatio + '）：'}}</div>
   <div class="item lastrow content3 number">{{getTotalWeightTon(data.vsws.survey.materials) | number: '1.2-2'}}</div>
   <div class="item lastrow content4 number">{{getAveragePrice(data.vsws.survey.materials) | number: '1.2-2'}}</div>
   <div class="item lastrow lastcolumn content5 number">{{getTotalAmount(data.vsws.survey.materials) | number: '1.2-2'}}</div>

@@ -87,13 +87,23 @@ export class VehicleSteelSurveyPrintComponent implements OnInit {
     }, 0)
   }
 
+  getTaxExclPrice(material: SurveyedMaterial) {
+    const taxRatio = this.data.vsws.taxRatio || 0;
+    const price = material.price || 0;
+    return price * (1 - taxRatio / 100);
+  }
+
   getTotalAmount(materials: SurveyedMaterial[]) {
+    // const totalAmount0 = materials.reduce((acc, curr) => {
+    //   return curr.pwId !== this.valueLessPwId ?
+    //     (curr.price ? (curr.price as number) * (curr.weightKG as number) + acc : acc) :
+    //     acc;
+    // }, 0)
+    // return totalAmount0 * (1 + (this.data.vsws.taxRatio ? this.data.vsws.taxRatio * 0.01 : 0));
     const totalAmount0 = materials.reduce((acc, curr) => {
-      return curr.pwId !== this.valueLessPwId ?
-        (curr.price ? (curr.price as number) * (curr.weightKG as number) + acc : acc) :
-        acc;
+      return curr.price ? (curr.price as number) * (curr.weightKG as number) + acc : acc
     }, 0)
-    return totalAmount0 * (1 + (this.data.vsws.taxRatio ? this.data.vsws.taxRatio * 0.01 : 0));
+    return totalAmount0;
   }
 
   getAveragePrice(materials: SurveyedMaterial[]) {
@@ -101,17 +111,17 @@ export class VehicleSteelSurveyPrintComponent implements OnInit {
   }
 
   getAmount(material: SurveyedMaterial) {
-    return (material.price || 0) * (material.weightKG || 0);
+    return this.getTaxExclPrice(material) * (material.weightKG || 0);
   }
 
   getDefaultPrice(material: SurveyedMaterial, prices: any[]) {
-      const pwId = material.pwId;
-        const [priceItem] = prices.filter(item => item.pwId === pwId);
-        if (priceItem) {
-          return priceItem.numbers.default * 1000;
-        } else {
-          return '';
-        }
+    const pwId = material.pwId;
+    const [priceItem] = prices.filter(item => item.pwId === pwId);
+    if (priceItem) {
+      return priceItem.numbers.default * 1000;
+    } else {
+      return '';
+    }
 
   }
 

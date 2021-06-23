@@ -22,12 +22,12 @@ export class VehicleSteelWeighingSurveyDialogService {
     private auth: AuthService
   ) { }
 
-  openDialog(vsws?: VehicleSteelWeighingSurvey, type?: string) {
+  openDialog(vsws?: VehicleSteelWeighingSurvey, type?: string, isOutbound = false) {
     console.log('opening vswsDialog with data:');
-    console.log(vsws);
+    console.log({vsws});
     const prepareVSWS = (vsws?: VehicleSteelWeighingSurvey) => {
       if (!vsws) {
-        const newVSWS = new VehicleSteelWeighingSurvey();
+        const newVSWS = new VehicleSteelWeighingSurvey(isOutbound);
         // const currUser = this.auth.getCurrentUser();
         // newVSWS.weighing.inWeighedBy = currUser?._id;
         // newVSWS.weighing.inWeighedByName = currUser?.displayName;

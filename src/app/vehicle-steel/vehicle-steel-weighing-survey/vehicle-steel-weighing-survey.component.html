@@ -1,37 +1,27 @@
-
 <mat-card>
-  <button mat-raised-button color="primary" (click)="onCreate()">新建进场物资</button>
+  <!-- <mat-card-header>
+    <mat-card-title><small>{{title}}</small></mat-card-title>
+  </mat-card-header> -->
+  <mat-card-content>
+    <button *ngIf="!isOutbound" mat-raised-button color="primary" (click)="onCreate()">新建物资进场</button>
+    <button *ngIf="isOutbound" mat-raised-button color="accent" (click)="onCreate()">新建物资出场</button>
+    <span>&nbsp;&nbsp;&nbsp;</span>
+    <mat-checkbox *ngIf="!isOutbound" (change)="filterSurveyDone$$.next($event.checked)">仅显示【未验质】</mat-checkbox>
+    <div><span>&nbsp;</span></div>
+    <app-vehicle-steel-weighing-survey-recent [isOutbound]="isOutbound" [vswsRecentList]="vswsRecentList$ | async">
+    </app-vehicle-steel-weighing-survey-recent>
+
+  </mat-card-content>
   <!-- <button mat-raised-button color="primary" (click)="openDialog()">新建进场物资</button> -->
-  <div>&nbsp;</div>
-  <mat-accordion>
+  <!-- <div>&nbsp;</div> -->
+  <!-- <mat-accordion>
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span>近期进场物资</span>
         </mat-panel-title>
-        <!-- <mat-panel-description>
-          Currently I am 
-        </mat-panel-description> -->
       </mat-expansion-panel-header>
-      <mat-checkbox
-        (change)="filterSurveyDone$$.next($event.checked)"
-      >仅显示【未验质】</mat-checkbox>
-      <div><span>&nbsp;</span></div>
-      <app-vehicle-steel-weighing-survey-recent [vswsRecentList]="vswsRecentList$ | async"></app-vehicle-steel-weighing-survey-recent>
     </mat-expansion-panel>
-  </mat-accordion>
-  <div>&nbsp;</div>
-  <mat-accordion>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          进场物资汇总
-        </mat-panel-title>
-        <!-- <mat-panel-description>
-          Currently I am 
-        </mat-panel-description> -->
-      </mat-expansion-panel-header>
-      <p>To Do</p>
-    </mat-expansion-panel>
-  </mat-accordion>
+  </mat-accordion> -->
+
 </mat-card>

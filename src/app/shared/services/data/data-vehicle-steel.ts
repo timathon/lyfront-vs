@@ -55,6 +55,7 @@ export class VehicleSteelWeighingSurvey {
   deletedBy?: any = null;
   deletedNotes?: any = null;
   taxRatio?: number;
+  isOutbound: boolean; // when false, it's inbound
   weighing: VehicleSteelWeighing = {
     truckPlateNo: '',
     customerId: '',
@@ -70,8 +71,9 @@ export class VehicleSteelWeighingSurvey {
     materials: []
   }
   changeLogs?: any[] = []; // delete before patch
-  constructor(/* creatorUserId: any */) {
+  constructor(/* creatorUserId: any */isOutbound = false) {
     // this.weighing.inWeighedBy = creatorUserId;
+    this.isOutbound = isOutbound;
   }
 }
 
@@ -90,7 +92,7 @@ export class DataVehicleSteel {
 
   }
 
-  getRecent(): Observable<VehicleSteelWeighingSurvey[]> {
+  getRecent(isOutbound = false): Observable<VehicleSteelWeighingSurvey[]> {
     // get items 
     // 1) inWeighed within 7 days; 
     // 2) inWeighed 7 days earlier and survey not done
@@ -101,13 +103,16 @@ export class DataVehicleSteel {
     dateX.setDate(dateX.getDate() - 29);
     const dateBeginningX = new Date(dateX.toISOString().substr(0, 10));
     dateBeginningX.setHours(0); // 00hours of +8000
-    const query1 = { createdAt: { $gte: new Date(dateBeginningX) } };
+    const query1 = {
+      createdAt: { $gte: new Date(dateBeginningX) },
+      isOutbound: isOutbound ? true : {$ne: true}
+    };
     const query2 = {
       createdAt: { $lt: new Date(dateBeginningX) },
       'survey.surveyedBy': ''
     };
 
-    return forkJoin({
+    const searchOp = isOutbound ? this.search(query1) : forkJoin({
       within7days: this.search(query1),
       over7daysNotSurveyed: this.search(query2)
     }).pipe(
@@ -116,6 +121,7 @@ export class DataVehicleSteel {
       })
     )
 
+    return searchOp;
     // return of(this.weighingSurveyEntries);
   }
 
@@ -128,7 +134,7 @@ export class DataVehicleSteel {
   update(patchesObj: {
     _id: string,
     vswsPatches?: any[],
-    materials?: {_id?: string, obj?: any, patches?: any[]}[]
+    materials?: { _id?: string, obj?: any, patches?: any[] }[]
   }) {
     console.log(patchesObj)
     return this.http.patch(this.apiURL + '/one', patchesObj, {

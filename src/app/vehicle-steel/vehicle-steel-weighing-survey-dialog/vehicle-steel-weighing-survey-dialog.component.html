@@ -1,4 +1,7 @@
-<h2 mat-dialog-title>{{dialogTitle}}</h2>
+<h2 mat-dialog-title>
+  <button *ngIf="data.vsws.isOutbound" mat-button color="accent">{{dialogTitle}}</button>
+  <button *ngIf="!data.vsws.isOutbound" mat-button color="primary">{{dialogTitle}}</button>
+</h2>
 <!-- <mat-dialog-content class="mat-typography"> -->
 <mat-dialog-content>
   <form [formGroup]="vswsForm">
@@ -57,19 +60,24 @@
         <button mat-button color="primary" *ngIf="!status.showNewCustomerButton" [disabled]="disableEditCustomerButton"
           (click)="openCustomerDialog(customer)">编辑客户</button>
         <br>
-        <mat-form-field>
+        <mat-form-field *ngIf="!data.vsws.isOutbound">
           <mat-label>毛重（公斤）</mat-label>
           <input matInput type="number" formControlName="inWeightKG">
-          <mat-icon matPrefix>login</mat-icon>
+          <mat-icon matPrefix>重</mat-icon>
+        </mat-form-field>
+        <mat-form-field *ngIf="data.vsws.isOutbound">
+          <mat-label>皮重（公斤）</mat-label>
+          <input matInput type="number" formControlName="inWeightKG">
+          <mat-icon matPrefix>轻</mat-icon>
         </mat-form-field>
         <span>&nbsp;</span>
         <mat-form-field>
-          <mat-label>进场日期</mat-label>
+          <mat-label>货车进场日期</mat-label>
           <input matInput type="date" formControlName="inWeighedDate">
         </mat-form-field>
         <span>&nbsp;</span>
         <mat-form-field>
-          <mat-label>进场时间</mat-label>
+          <mat-label>货车进场时间</mat-label>
           <input matInput type="time" formControlName="inWeighedTime">
         </mat-form-field>
         <span>&nbsp;</span>
@@ -78,19 +86,24 @@
           <input matInput formControlName="inWeighedByName">
         </mat-form-field>
         <br>
-        <mat-form-field>
+        <mat-form-field *ngIf="!data.vsws.isOutbound">
           <mat-label>皮重（公斤）</mat-label>
           <input matInput type="number" formControlName="outWeightKG">
-          <mat-icon matPrefix>logout</mat-icon>
+          <mat-icon matPrefix>轻</mat-icon>
+        </mat-form-field>
+        <mat-form-field *ngIf="data.vsws.isOutbound">
+          <mat-label>毛重（公斤）</mat-label>
+          <input matInput type="number" formControlName="outWeightKG">
+          <mat-icon matPrefix>重</mat-icon>
         </mat-form-field>
         <span>&nbsp;</span>
         <mat-form-field>
-          <mat-label>出场日期</mat-label>
+          <mat-label>货车出场日期</mat-label>
           <input matInput type="date" formControlName="outWeighedDate">
         </mat-form-field>
         <span>&nbsp;</span>
         <mat-form-field>
-          <mat-label>出场时间</mat-label>
+          <mat-label>货车出场时间</mat-label>
           <input matInput type="time" formControlName="outWeighedTime">
         </mat-form-field>
         <span>&nbsp;</span>
@@ -127,7 +140,7 @@
     <mat-card>
       <mat-card-header>
         <mat-card-title>
-          <small>验质信息</small>
+          <small>物资信息</small>
           <span>&nbsp;&nbsp;&nbsp;</span>
           <small>
 
@@ -147,17 +160,17 @@
             <span matSuffix>%</span>
           </mat-form-field>
           <span>&nbsp;&nbsp;&nbsp;</span>
-          <button mat-raised-button color="primary" (click)="addMaterial()" [disabled]="
-          !$any(vswsForm.get('weighing.inWeightKG')).value || !$any(vswsForm.get('weighing.outWeightKG')).value ||
-          ($any(vswsForm.get('weighing.inWeightKG')).value - $any(vswsForm.get('weighing.outWeightKG')).value <= 0)
-          ">添加物资</button>
+          <button mat-raised-button color="primary" (click)="addMaterial()" [disabled]="!status.netWeightKG">添加物资</button>
           <span>&nbsp;&nbsp;&nbsp;</span>
-          <button mat-button *ngIf="
+          <button mat-button *ngIf="!status.netWeightKG">
+            添加物资前，请录入有效过磅数据并保存
+          </button>
+          <!-- <button mat-button *ngIf="
           !$any(vswsForm.get('weighing.inWeightKG')).value || !$any(vswsForm.get('weighing.outWeightKG')).value ||
           ($any(vswsForm.get('weighing.inWeightKG')).value - $any(vswsForm.get('weighing.outWeightKG')).value <= 0)
           ">
-            添加物资前，请录入有效过磅数据
-          </button>
+            添加物资前，请录入有效过磅数据并保存
+          </button> -->
           <button mat-button color="warn" *ngIf="false">
             物资总重不能大于过磅净重
           </button>

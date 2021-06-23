@@ -4,12 +4,12 @@
         The actual rendered columns are set as a property on the row definition" -->
 
   <ng-container matColumnDef="_id">
-    <th mat-header-cell *matHeaderCellDef> 进场日期 </th>
+    <th mat-header-cell *matHeaderCellDef> 货车进场日期 </th>
     <td mat-cell *matCellDef="let element"> {{element.weighing?.inWeighedAt | date: 'y-MM-dd HH:mm'}} </td>
   </ng-container>
 
   <ng-container matColumnDef="truckPlateNo">
-    <th mat-header-cell *matHeaderCellDef> 进场车牌号 </th>
+    <th mat-header-cell *matHeaderCellDef> 货车车牌号 </th>
     <td mat-cell *matCellDef="let element"> {{element.weighing.truckPlateNo}} </td>
   </ng-container>
 

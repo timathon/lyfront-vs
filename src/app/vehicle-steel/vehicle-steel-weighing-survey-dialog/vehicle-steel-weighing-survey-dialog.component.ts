@@ -55,6 +55,7 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit, OnDest
     isDeleted: true,
     deletedAt: true,
     taxRatio: true,
+    isOutbound: true,
     weighing: {
       truckPlateNo: true,
       customerId: true,
@@ -114,6 +115,7 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit, OnDest
       deletedAt: this.data.vsws.deletedAt,
       deletedBy: this.data.vsws.deletedBy,
       deletedNotes: this.data.vsws.deletedNotes,
+      isOutbound: this.data.vsws.isOutbound,
       taxRatio: this.data.vsws.taxRatio,
       weighing: this.fb.group({
         truckPlateNo: [{
@@ -169,7 +171,11 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit, OnDest
       })
     })
 
-    this.dialogTitle = this.data.vsws._id ? '编辑进场物资' : '新建进场物资'
+    this.dialogTitle = this.data.vsws.isOutbound ? (
+      this.data.vsws._id ? '编辑物资出场' : '新建物资出场'
+    ) : (
+      this.data.vsws._id ? '编辑物资进场' : '新建物资进场'
+    )
   }
 
   ngOnDestroy() {
@@ -231,7 +237,11 @@ export class VehicleSteelWeighingSurveyDialogComponent implements OnInit, OnDest
               }, { emitEvent: false });
               this.status.lastValue.outWeightKG = newOutWeightKG;
             }
-            this.status.netWeightKG = (newInWeightKG && newOutWeightKG) ? (newInWeightKG - newOutWeightKG) : 0;
+            this.status.netWeightKG = this.data.vsws.isOutbound ? (
+              (newInWeightKG && newOutWeightKG) ? (newOutWeightKG - newInWeightKG) : 0
+            ) : (
+              (newInWeightKG && newOutWeightKG) ? (newInWeightKG - newOutWeightKG) : 0
+            );
 
             // if negative netWeightKG, add form error
             if (this.status.netWeightKG < 0) {

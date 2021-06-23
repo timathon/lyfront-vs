@@ -39,7 +39,9 @@
 
 <div class="t3" id="dataToPrint" [ngStyle]="{'padding': padding}">
   <div class="header">辽宁隆运环保科技股份有限公司</div>
-  <div class="header2">入库结算单</div>
+  <div class="header2">
+    <span *ngIf="!data.vsws.isOutbound">入库结算单</span><span *ngIf="data.vsws.isOutbound">【出库】结算单</span>
+    </div>
   <!-- <div class="meta meta1">序号：{{data.vsws.weighing?.inWeighedAt | date: 'yMMddHHmm'}}</div>
   <div class="meta meta2"></div>
   <div class="meta meta3">单位：公斤</div> -->

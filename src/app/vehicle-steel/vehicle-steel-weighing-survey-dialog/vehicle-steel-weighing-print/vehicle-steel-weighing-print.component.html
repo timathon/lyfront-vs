@@ -37,7 +37,7 @@
 </form>
 
 <div class="t3" id="dataToPrint" [ngStyle]="{'padding': padding}">
-  <div class="header">辽宁隆运环保科技股份有限公司 - 过磅单</div>
+  <div class="header">辽宁隆运环保科技股份有限公司 - 过磅单<span *ngIf="!data.vsws.isOutbound">（物资进场）</span><span *ngIf="data.vsws.isOutbound">（物资出场）</span></div>
   <div class="meta meta1">序号：{{data.vsws.weighing?.inWeighedAt | date: 'yMMddHHmm'}}</div>
   <div class="meta meta2"></div>
   <div class="meta meta3">单位：公斤</div>
@@ -49,14 +49,14 @@
   <div class="item title">客户</div>
   <div class="item lastcolumn content">{{data.vsws.weighing.customerName}}</div>
 
-  <div class="item title">毛重</div>
+  <div class="item title"><span *ngIf="!data.vsws.isOutbound">毛重</span><span *ngIf="data.vsws.isOutbound">皮重</span></div>
   <div class="item content">{{data.vsws.weighing.inWeightKG | number}}</div>
   <div class="item title">司磅员</div>
   <div class="item content">超级权限</div>
   <div class="item title">日期</div>
   <div class="item lastcolumn content">{{data.vsws.weighing?.inWeighedAt | date: 'y-MM-dd HH:mm'}}</div>
 
-  <div class="item title">皮重</div>
+  <div class="item title"><span *ngIf="!data.vsws.isOutbound">皮重</span><span *ngIf="data.vsws.isOutbound">毛重</span></div>
   <div class="item content">{{data.vsws.weighing.outWeightKG | number}}</div>
   <div class="item title">司磅员</div>
   <div class="item content">超级权限</div>
@@ -64,11 +64,11 @@
   <div class="item lastcolumn content">{{data.vsws.weighing?.outWeighedAt | date: 'y-MM-dd HH:mm'}}</div>
 
   <div class="item lastrow title netweightat">净重</div>
-  <div class="item lastrow content netweightac">{{data.vsws.weighing.inWeightKG - data.vsws.weighing.outWeightKG |
+  <div class="item lastrow content netweightac">{{(data.vsws.weighing.inWeightKG - data.vsws.weighing.outWeightKG) * (data.vsws.isOutbound ? -1 : 1) |
     number}}</div>
   <div class="item lastrow title netweightbt">净重大写</div>
   <div class="item lastrow lastcolumn content netweightbc">
-    {{utils.toChineseNumber(data.vsws.weighing.inWeightKG - data.vsws.weighing.outWeightKG)}}
+    {{utils.toChineseNumber((data.vsws.weighing.inWeightKG - data.vsws.weighing.outWeightKG) * (data.vsws.isOutbound ? -1 : 1))}}
   </div>
 
 

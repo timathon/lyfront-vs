@@ -13,10 +13,9 @@ import { switchMap } from 'rxjs/operators';
 })
 export class VehicleSteelWeighingSurveyRecentComponent implements OnInit {
   @Input() vswsRecentList: VehicleSteelWeighingSurvey[] = [];
+  @Input() isOutbound = false;
   // vswsRecentList$: Observable<VehicleSteelWeighingSurvey[]>
-  displayedColumns: string[] = [
-    '_id', 'truckPlateNo', 'netWeight', 'surveyDone', 'operations', /* 'print' */
-  ];
+  displayedColumns: string[] = [];
   constructor(
     // private backend: DataService,
     public dialog: MatDialog,
@@ -28,6 +27,11 @@ export class VehicleSteelWeighingSurveyRecentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.displayedColumns = this.isOutbound ? [
+      '_id', 'truckPlateNo', 'netWeight', 'operations', /* 'print' */
+    ] : [
+      '_id', 'truckPlateNo', 'netWeight', 'surveyDone', 'operations', /* 'print' */
+    ]
   }
 
   onEdit(item: any) {
@@ -61,9 +65,17 @@ export class VehicleSteelWeighingSurveyRecentComponent implements OnInit {
   }
 
   getNetWeight(item: VehicleSteelWeighingSurvey) {
-      return (!!(item.weighing?.inWeightKG * 1) && !!(item.weighing?.outWeightKG * 1)) ?
-      (item.weighing?.inWeightKG - item.weighing?.outWeightKG) :
-      0;
+      return item.isOutbound ? (
+        (item.weighing?.inWeightKG && item.weighing?.outWeightKG) ?
+        (item.weighing?.outWeightKG - item.weighing?.inWeightKG) :
+        0
+      ) : (
+        (item.weighing?.inWeightKG && item.weighing?.outWeightKG) ?
+        (item.weighing?.inWeightKG - item.weighing?.outWeightKG) :
+        0
+      );
+      
+      
   }
 
   onPrintB(item: VehicleSteelWeighingSurvey) {

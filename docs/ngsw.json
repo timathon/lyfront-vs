@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1623898340629,
+  "timestamp": 1624427699354,
   "index": "/lyfront-vs/index.html",
   "assetGroups": [
     {
@@ -11,13 +11,13 @@
         "ignoreVary": true
       },
       "urls": [
-        "/lyfront-vs/918.5624c58fae385673ba0f.js",
+        "/lyfront-vs/918.cc772cc7b66087accbbf.js",
         "/lyfront-vs/favicon.ico",
         "/lyfront-vs/index.html",
-        "/lyfront-vs/main.8d12ca2825fb54199b86.js",
+        "/lyfront-vs/main.ccaa77e5f41fc96b97f5.js",
         "/lyfront-vs/manifest.webmanifest",
         "/lyfront-vs/polyfills.6cf6925da0de9324f40f.js",
-        "/lyfront-vs/runtime.9efc8fa22a6cff358056.js",
+        "/lyfront-vs/runtime.0f1e3e6706fe7bc60753.js",
         "/lyfront-vs/styles.789812bfed72741ef445.css"
       ],
       "patterns": []
@@ -44,7 +44,7 @@
   ],
   "dataGroups": [],
   "hashTable": {
-    "/lyfront-vs/918.5624c58fae385673ba0f.js": "7a95551e4804c6ead4435e85c9dbd4c90b0915ed",
+    "/lyfront-vs/918.cc772cc7b66087accbbf.js": "3b2cd32a9f3471cb6e00f1acf1b07154ee121010",
     "/lyfront-vs/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
     "/lyfront-vs/assets/icons/icon-144x144.png": "b0bd89982e08f9bd2b642928f5391915b74799a7",
     "/lyfront-vs/assets/icons/icon-152x152.png": "7479a9477815dfd9668d60f8b3b2fba709b91310",
@@ -54,11 +54,11 @@
     "/lyfront-vs/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
     "/lyfront-vs/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
     "/lyfront-vs/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/lyfront-vs/index.html": "f6ca75f0d9c7b7880a12dc993fb9f2b4106fca3a",
-    "/lyfront-vs/main.8d12ca2825fb54199b86.js": "773604ca70a38a36c5a3391cce9280cf2a8f8741",
+    "/lyfront-vs/index.html": "4e81600fffa581d2befc7b67e2e885a955447ced",
+    "/lyfront-vs/main.ccaa77e5f41fc96b97f5.js": "fb5a9939aca0bc65aecfb1626d906c391ff6277a",
     "/lyfront-vs/manifest.webmanifest": "a36ef649f6a009da89e9063db9553af3a3fadeea",
     "/lyfront-vs/polyfills.6cf6925da0de9324f40f.js": "0fc61673508035b54914f46900726fc1ad89e1a7",
-    "/lyfront-vs/runtime.9efc8fa22a6cff358056.js": "bef5f5c4c7efd37e42c0fa2f35a28690d8e73349",
+    "/lyfront-vs/runtime.0f1e3e6706fe7bc60753.js": "45b12c8e3ebc840a3a139a9fbe70940df01f2451",
     "/lyfront-vs/styles.789812bfed72741ef445.css": "ca65d7e8b7cb003c336a05e8528d4b691ae1e0d8"
   },
   "navigationUrls": [

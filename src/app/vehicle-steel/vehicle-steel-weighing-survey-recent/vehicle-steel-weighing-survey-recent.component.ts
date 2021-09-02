@@ -30,7 +30,7 @@ export class VehicleSteelWeighingSurveyRecentComponent implements OnInit {
     this.displayedColumns = this.isOutbound ? [
       '_id', 'truckPlateNo', 'netWeight', 'operations', /* 'print' */
     ] : [
-      '_id', 'truckPlateNo', 'netWeight', 'surveyDone', 'operations', /* 'print' */
+      '_id', 'truckPlateNo', 'netWeight', 'surveyDone', 'isProc', 'operations', /* 'print' */
     ]
   }
 

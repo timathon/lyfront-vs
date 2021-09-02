@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DataService } from "@app/shared/services/data.service";
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject, of, combineLatest } from 'rxjs';
 import { map, startWith, switchMap, tap } from 'rxjs/operators';
 import { VehicleSteelWeighingSurveyDialogService } from '@app/vehicle-steel/vehicle-steel-weighing-survey-dialog/vehicle-steel-weighing-survey-dialog.service';
 import { LoadingComponent } from '@app/shared/components/loading/loading.component';
@@ -16,6 +16,7 @@ export class VehicleSteelWeighingSurveyComponent implements OnInit {
   title = '';
   public vswsRecentList$?: Observable<any>
   filterSurveyDone$$ = new BehaviorSubject(false);
+  filterIsProc$$ = new BehaviorSubject(false);
 
   constructor(
     private backend: DataService,
@@ -31,7 +32,7 @@ export class VehicleSteelWeighingSurveyComponent implements OnInit {
         })
       )
       .subscribe(result => {
-        console.log({editResult: result});
+        console.log({ editResult: result });
         // if changed, reload recent
       })
   }
@@ -56,10 +57,13 @@ export class VehicleSteelWeighingSurveyComponent implements OnInit {
         vswsRecentList = vswsRecentList.sort((a, b) => {
           return Date.parse(b.createdAt) - Date.parse(a.createdAt);
         });
-        return this.filterSurveyDone$$
+        return combineLatest([this.filterSurveyDone$$, this.filterIsProc$$])
           .pipe(
-            map((showOnlySurveyNotDone) => {
-              return showOnlySurveyNotDone ? vswsRecentList.filter(item => !!item.survey.surveyedAt === false) : vswsRecentList
+            map((combo) => {
+              const [showOnlySurveyNotDone, showOnlyIsProc] = combo;
+              let theList = showOnlySurveyNotDone ? vswsRecentList.filter(item => !!item.survey.surveyedAt === false) : vswsRecentList;
+              theList = showOnlyIsProc ? theList.filter(item => item.weighing.customerId !== '60b99776fe22ea0526faa6c9') : theList;
+              return theList;
             }),
             tap(() => {
               loadingDialogRef.close();
@@ -68,7 +72,7 @@ export class VehicleSteelWeighingSurveyComponent implements OnInit {
 
       })
     )
-    
+
   }
 
 }

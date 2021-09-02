@@ -7,6 +7,8 @@
     <button *ngIf="isOutbound" mat-raised-button color="accent" (click)="onCreate()">新建物资出场</button>
     <span>&nbsp;&nbsp;&nbsp;</span>
     <mat-checkbox *ngIf="!isOutbound" (change)="filterSurveyDone$$.next($event.checked)">仅显示【未验质】</mat-checkbox>
+    <span>&nbsp;&nbsp;&nbsp;</span>
+    <mat-checkbox *ngIf="!isOutbound" (change)="filterIsProc$$.next($event.checked)">仅显示【采购】</mat-checkbox>
     <div><span>&nbsp;</span></div>
     <app-vehicle-steel-weighing-survey-recent [isOutbound]="isOutbound" [vswsRecentList]="vswsRecentList$ | async">
     </app-vehicle-steel-weighing-survey-recent>

@@ -49,6 +49,11 @@
     <td mat-cell *matCellDef="let element"> {{!!element.survey.surveyedAt ? '是' : '否'}} </td>
   </ng-container>
 
+  <ng-container matColumnDef="isProc">
+    <th mat-header-cell *matHeaderCellDef> 采购 </th>
+    <td mat-cell *matCellDef="let element"> {{element.weighing.customerId === '60b99776fe22ea0526faa6c9' ? '' : '是'}} </td>
+  </ng-container>
+
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>

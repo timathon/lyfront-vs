@@ -6,7 +6,8 @@ export const environment = {
   production: false,
   authUrl: '',
   // authUrl: 'https://1586863340063318.cn-zhangjiakou.fc.aliyuncs.com/2016-08-15/proxy/ly/ly-auth/',
-  backendUrl: 'https://47.104.155.50:3003'
+  backendUrl: 'https://1586863340063318.cn-zhangjiakou.fc.aliyuncs.com/2016-08-15/proxy/ly.LATEST/ly-proxy/json_placeholder/'
+  // backendUrl: 'https://47.104.155.50:3003'
 };
 
 /*
